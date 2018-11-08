@@ -46,6 +46,14 @@ const handlePushTokens = (message, title) => {
               sound: 'default',
               title: title,
               priority: "high",
+              vibrate: true,
+              sound:true,
+              android: {
+                sound: true,
+              },
+              ios: {
+                sound: true,
+              },
               body: message,
               data: { message },
             })
