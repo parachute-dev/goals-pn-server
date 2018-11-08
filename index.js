@@ -80,7 +80,7 @@ const saveToken = (token, email, member_id) => {
   });
 
   User.findOneAndUpdate(
-    {member_id: member_id}, 
+    {token}, 
     {token, email, member_id}, 
     {upsert: true, new: true, runValidators: true},
     function (err, doc) { 
