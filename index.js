@@ -45,6 +45,7 @@ const handlePushTokens = (message, title) => {
               to: user.token,
               sound: 'default',
               title: title,
+              priority: "high",
               body: message,
               data: { message },
             })

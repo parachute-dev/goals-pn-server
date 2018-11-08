@@ -1,0 +1,50 @@
+DONOR ACQUISITION - MAXIMISING CONVERSIONS. 
+
+- talk through what we're doing for donations on the main site. The evolution to this would be a drastic overhaul of the look and feel.
+- we would be able to have an even better integration - tighter event tracking -- better sign posting. 
+- We need to identify your goals. What's lacking, what's we want to capatilise on. We could have a window of analysis of the current site. 
+-- Enquiries for teachers
+-- Sharing of resources
+-- Donations 
+-- Awareness
+
+Feeding all of this into digital campaigns
+- Creating on Landing pages
+- CMS fit for purpose - come onto 
+- LPages tailored for the audience
+
+
+
+APPROACH TO IDENTIFYING / PRIOTISING AUDIENCES.
+-------
+- we would let the data inform us. Using analytics for current user usage - demographics, location, we would build up profiles
+- It would be good to create tailored landing pages for different audiences - 
+- Using any CRM data - a blend. 
+- We could also analyse the current website for a period - HotJar - additional analytic tracking to build up a pitch
+
+The design team kick off with a discovery period which is vital to create a close link with the brand
+
+
+DESIGN.
+-------
+-Discovery
+--Fact finding (Meet the team / Site visit / Sit In and Shadow)
+--Analyse brand guidelines.
+--Liasewith the Nordoff team to assess current assets
+--Identify new design preferences and new trends
+--Creation of mood boards and style scapes
+
+-Planning
+--Site mapping
+--Creation of Low fidelity Wireframes (desktop and mobile)
+--Navigation and User Journey Mapping
+--Content Application
+
+-Design
+--Design of Site navigation
+--Iterative Creation of Fully branded homepage
+--Iterative Creation of Fully branded inner pages
+
+
+CMS.
+-------
