@@ -8,7 +8,7 @@ const app = express();
 const expo = new Expo();
 
 
-const PORT_NUMBER = 80;
+const PORT_NUMBER = process.env.PORT || 80;
 
 //Set up default mongoose connection
 var mongoDB = 'mongodb://parachute:Uzx**978@ds257333-a0.mlab.com:57333,ds257333-a1.mlab.com:57333/heroku_cngjj092?replicaSet=rs-ds257333';
