@@ -113,7 +113,7 @@ app.post('/token', (req, res) => {
 app.post('/message', (req, res) => {
   handlePushTokens(req.body.message, req.body.title);
   console.log(`Received message, ${req.body.message}`);
-  res.send(`Received message, ${req.body.message}`);
+  res.send(`Message successfully sent:  ${req.body.message}`);
 });
 
 app.listen(PORT_NUMBER, () => {
