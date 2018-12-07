@@ -37,9 +37,9 @@ mailer.extend(app, {
 });
 
 //Set up default mongoose connection
-var mongoDB = 'mongodb://localhost:27017';
-//var mongoDB = 'mongodb://parachute:Uzx**978@ds257333-a0.mlab.com:57333,ds257333-a1.mlab.com:57333/heroku_cngjj092?replicaSet=rs-ds257333';
-
+//var mongoDB = 'mongodb://localhost:27017';
+var mongoDB = 'mongodb://parachute:Uzx**978@ds257333-a0.mlab.com:57333,ds257333-a1.mlab.com:57333/heroku_cngjj092?replicaSet=rs-ds257333';
+ 
 mongoose.connect(mongoDB);
 // Get Mongoose to use the global promise library
 mongoose.Promise = global.Promise;
