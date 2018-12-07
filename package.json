@@ -3,16 +3,23 @@
     "node": "10.13.0"
   },
   "dependencies": {
+    "Q": "^1.0.0",
+    "body-parser": "^1.18.3",
+    "consolidate": "^0.15.1",
     "esm": "^3.0.28",
     "expo": "^27.0.1",
     "expo-server-sdk": "^2.3.3",
     "express": "^4.16.3",
+    "express-mailer": "^0.3.1",
     "mongoose": "^5.3.8",
+    "mongoose-simple-random": "^0.4.1",
+    "q": "^1.5.1",
     "react": "16.3.1",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-27.0.0.tar.gz"
+    "react-native": "https://github.com/expo/react-native/archive/sdk-27.0.0.tar.gz",
+    "swig": "^1.4.2"
   },
   "scripts": {
-    "serve": "node -r esm index.js",
+    "serve": "nodemon -r esm index.js",
     "start": "node -r esm index.js"
   }
 }

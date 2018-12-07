@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<h1>HELLO</h1>
+	{% for x in user.result %}
+	{% if loop.first %}<ul>{% endif %}
+		<li>{{ loop.index }} - {{ loop.key }}: {{ x }}</li>
+	{% if loop.last %}</ul>{% endif %}
+	{% endfor %}
+</body>
+</html>
