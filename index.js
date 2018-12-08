@@ -93,27 +93,7 @@ const createOffer = (name, description, loyalty_points_required, res) => {
 }
 
 
-const createUser = (first_name, last_name, email, member_id, res) => {
 
-  var user = new User({
-    first_name,
-    last_name,
-    email,
-    member_id,
-    loyalty_points : 0
-  });
-console.log(user)
-
-  User.create(user).then(function(doc){
-    console.log("Created User");
-    res.send(doc);
-  }).catch(function(err){
-
-    res.send("null");
-
-  });
-
-}
 
 const updateOffer = (_id, name, description, loyalty_points_required, res) => {
 
@@ -392,22 +372,27 @@ const saveWinner = (member_id, club_id, email, first_name, last_name) => {
 
 }
 
-const saveBooking = (member_id, club_id, email, first_name, last_name) => {
+const saveBooking = (booking_ref, booking_date, member_id, club_id, amount_paid, booking_mode, res) => {
+
+
 
   var new_booking = new Booking({
+    booking_date,
+    booking_ref,
     member_id,
     club_id,
-    email,
-    first_name,
-    last_name
-  });
+    amount_paid,
+    booking_mode
+  }); 
+console.log(new_booking);
 
   new_booking.save(function (err, doc) { 
     if (err) {
       console.log(err);
+      res.send("false");
 
     } else {
-      console.log("saved: " + member_id);
+      res.send("true");
 
     }
   });
@@ -593,11 +578,10 @@ app.post('/user', (req, res) => {
   createUpdateUser(user, res)
 });
 
-
 app.post('/booking', (req, res) => {
-  saveBooking(req.body.member_id, req.body.club_id, req.body.email, req.body.first_name, req.body.last_name );
+  saveBooking(req.body.booking_ref, req.body.booking_date, req.body.member_id, req.body.club_id, req.body.amount_paid, req.body.booking_mode, res );
   console.log(`Received Booking: ${req.body.member_id}`);
-  res.send(`${req.body.member_id}`);
+
 });
 
 app.post('/winners/choose', (req, res) => {
