@@ -8,7 +8,7 @@ var userSchema = new Schema({
   member_id: { type: String, required: true, unique:true },
   first_name: { type: String, required: true },
   last_name: { type: String, required: true },    
-  loyalty_points: { type: Number, min: [0, 'Cant have less than zero!'], max: 200,  default: 0  },
+  loyalty_points: { type: Number, min: [0, 'Cant have less than zero!'], max: 200, required: true, default: 0  },
   created_at: Date,
   updated_at: Date
 });
