@@ -571,41 +571,31 @@ app.post('/winner/redeem', (req, res) => {
 
 app.post('/loyalty', (req, res) => {
 
-console.log(req.get('api-key'));
-  if (req.get('api-key') == apikey) {
+
 
     updateLoyalty(req.body.member_id, req.body.loyalty_points,res);
-  }else{
-   res.send('{ "error": "No Auth"}');
 
- }
 }); 
 
 app.get('/loyalty/:member_id', (req, res) => {
-  if (req.get('api-key') == apikey) {
+
     console.log(req.params.member_id);
     getLoyalty(req.params.member_id, res);
-  }else{
-      res.send('{ "error": "No Auth"}');
-;
 
- }
 });
 
 app.post('/token', (req, res) => {
 
- if (req.get('api-key') == apikey) {
+
   console.log("HERE");
   console.log(req.body);
   console.log(req.body.token);
   console.log(req.body.member_id);
   console.log(req.body.device_type);
   saveToken(req.body.token, req.body.device_type, req.body.member_id ,res);
-}else{
-    res.send('{ "error": "No Auth"}');
-;
 
-}
+    res.send('{ "error": "No Auth"}');
+
 });
 
 app.post('/message', (req, res) => {
