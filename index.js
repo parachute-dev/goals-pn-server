@@ -22,7 +22,7 @@ const expo = new Expo();
 
 const apikey = 'EA0uhHt8%j';
 
-var trustedIps = ['8.8.8.8',"::1"];
+var trustedIps = ['8.8.8.8',"::1", "109.203.101.235"];
 
 app.engine('html', cons.swig)
 app.set('views', __dirname + '/Views');
