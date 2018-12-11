@@ -633,7 +633,7 @@ app.post('/message', (req, res) => {
 
   }else{
     console.log(`Received not sent - IP rejected`);
-    res.send(`not allowed to send - IP rejected`);
+    res.send(`{"error" : "not allowed to send - IP rejected", "IP" : ${requestIP}}`);
 
   }
 
