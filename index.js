@@ -22,7 +22,7 @@ const expo = new Expo();
 
 const apikey = 'EA0uhHt8%j';
 
-var trustedIps = ['8.8.8.8',"::1", "109.203.101.235"];
+var trustedIps = ['8.8.8.8',"::1", "109.203.101.235", "::ffff:10.47.207.66"];
 
 app.engine('html', cons.swig)
 app.set('views', __dirname + '/Views');
@@ -602,7 +602,7 @@ app.post('/message', (req, res) => {
 
   if (req.get('api-key') == apikey) {
 
-    var requestIP = req.connection.remoteAddress;
+    var requestIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
     if(trustedIps.indexOf(requestIP) >= 0) {
 
@@ -683,7 +683,7 @@ app.post('/winners/choose', (req, res) => {
 app.post('/message/:member_id', (req, res) => {
 
   if (req.get('api-key') == apikey) {
-    var requestIP = req.connection.remoteAddress;
+    var requestIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
 
     if(trustedIps.indexOf(requestIP) >= 0) {
