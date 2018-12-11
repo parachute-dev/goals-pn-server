@@ -533,7 +533,8 @@ const updateLoyalty = (member_id, points, res) => {
 
       updateOffer(req.body.id, req.body.name, req.body.description, req.body.loyalty_points_required, res);
     }else{
-     res.send("No Auth");
+        res.send('{ "error": "No Auth"}');
+;
    }
  });
 
@@ -542,7 +543,8 @@ const updateLoyalty = (member_id, points, res) => {
     if (req.get('api-key') == apikey) {
       createOffer( req.body.name, req.body.description, req.body.loyalty_points_required, res);
     }else{
-     res.send("No Auth");
+        res.send('{ "error": "No Auth"}');
+;
    }
  });
 
@@ -561,18 +563,20 @@ app.post('/winner/redeem', (req, res) => {
     res.send(`Rede emed Winner, ${req.body.member_id}`);
 
   }else{
-   res.send("No Auth");
+      res.send('{ "error": "No Auth"}');
+;
 
  }
 });
 
 app.post('/loyalty', (req, res) => {
 
+console.log(req.get('api-key'));
   if (req.get('api-key') == apikey) {
 
     updateLoyalty(req.body.member_id, req.body.loyalty_points,res);
   }else{
-   res.send("No Auth");
+   res.send('{ "error": "No Auth"}');
 
  }
 }); 
@@ -582,7 +586,8 @@ app.get('/loyalty/:member_id', (req, res) => {
     console.log(req.params.member_id);
     getLoyalty(req.params.member_id, res);
   }else{
-   res.send("No Auth");
+      res.send('{ "error": "No Auth"}');
+;
 
  }
 });
@@ -597,7 +602,8 @@ app.post('/token', (req, res) => {
   console.log(req.body.device_type);
   saveToken(req.body.token, req.body.device_type, req.body.member_id ,res);
 }else{
- res.send("No Auth");
+    res.send('{ "error": "No Auth"}');
+;
 
 }
 });
@@ -645,7 +651,8 @@ app.post('/message', (req, res) => {
 
 
 }else{
- res.send("No Auth");
+    res.send('{ "error": "No Auth"}');
+;
 
 }
 }
@@ -670,7 +677,8 @@ app.post('/booking', (req, res) => {
     saveBooking(req.body.booking_ref, req.body.booking_date, req.body.member_id, req.body.club_id, req.body.amount_paid, req.body.booking_mode, res );
     console.log(`Received Booking: ${req.body.member_id}`);
   }else{
-   res.send("No Auth");
+      res.send('{ "error": "No Auth"}');
+;
 
  }
 });
@@ -682,7 +690,8 @@ app.post('/winners/choose', (req, res) => {
     res.send(`Getting Tonights Winners, ${req.body.member_id}`);
 
   }else{
-   res.send("No Auth");
+      res.send('{ "error": "No Auth"}');
+;
 
  }
 });
@@ -722,7 +731,8 @@ app.post('/message/:member_id', (req, res) => {
     res.send(`not allowed to send - IP rejected`);
   }
 }else{
- res.send("No Auth");
+    res.send('{ "error": "No Auth"}');
+;
 
 }
 
@@ -736,7 +746,8 @@ app.get('/winner/verify/:member_id', (req,res) => {
   if (req.get('api-key') == apikey) {
     verifyWinner(req.params.member_id, res);
   }else{
-   res.send("No Auth");
+      res.send('{ "error": "No Auth"}');
+;
 
  }
 });
