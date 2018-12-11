@@ -594,7 +594,7 @@ app.post('/token', (req, res) => {
   console.log(req.body.device_type);
   saveToken(req.body.token, req.body.device_type, req.body.member_id ,res);
 
-    res.send('{ "error": "No Auth"}');
+  res.send('{ "error": "No Auth"}');
 
 });
 
@@ -638,8 +638,6 @@ app.post('/message', (req, res) => {
   }
 
 
-
-
 }else{
     res.send('{ "error": "No Auth"}');
 ;
@@ -662,15 +660,11 @@ app.post('/user', (req, res) => {
 
 app.post('/booking', (req, res) => {
 
-  if (req.get('api-key') == apikey) {
+
 
     saveBooking(req.body.booking_ref, req.body.booking_date, req.body.member_id, req.body.club_id, req.body.amount_paid, req.body.booking_mode, res );
     console.log(`Received Booking: ${req.body.member_id}`);
-  }else{
-      res.send('{ "error": "No Auth"}');
-;
 
- }
 });
 
 app.post('/winners/choose', (req, res) => {
@@ -733,13 +727,9 @@ app.post('/message/:member_id', (req, res) => {
 
 app.get('/winner/verify/:member_id', (req,res) => {
 
-  if (req.get('api-key') == apikey) {
-    verifyWinner(req.params.member_id, res);
-  }else{
-      res.send('{ "error": "No Auth"}');
-;
 
- }
+    verifyWinner(req.params.member_id, res);
+
 });
 
 app.post('/hook',(req,res) => {
