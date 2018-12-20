@@ -512,7 +512,7 @@ const saveToken = (token, device_type, member_id, res) => {
                   createdDate: doc.created_at
                 }
                 sendEmail(doc.email, "SUBJECT", user, "email");
-                    res.send(`Redeemed Winner`);
+                    res.send(`{"success": "Redeemed"}`);
 
                 return doc;
               }else{
