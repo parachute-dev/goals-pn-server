@@ -193,9 +193,9 @@ const handlePushTokens = (message, title, member_id) => {
               body: message,
               data: { message, title },
 
-               android: {
-    channelId: 'promotion-messages',
-  },
+              android: {
+                channelId: 'promotion-messages',
+              },
             })
           }
 
@@ -293,6 +293,7 @@ const saveToken = (token, device_type, member_id, res) => {
 
     const getTonightsWinners = () =>{
 
+      console.log("GETTINGWINNERS");
       var result = [];
 
       let response = Club.find({}, (err, clubs) => {
@@ -300,253 +301,261 @@ const saveToken = (token, device_type, member_id, res) => {
 
 
 
-   //generateReport(result);
+        }
 
- }
+      }).then(function(clubs) {  
 
-}).then(function(clubs) {  
+        console.log(clubs);
 
+        for(var club of clubs){
 
-  for(var club of clubs){
-
-
-   Booking.findRandom({club_id: club.club_code}, {}, {limit: 1}, function(err, result) {
+          console.log(club.Name);
 
 
+         Booking.findRandom({club_id: club.Name}, {}, {limit: 1}, function(err, result) {
 
-    if (!err && result != null) {
-      console.log(result[0].club_id);
+
+
+          if (!err && result != null) {
+            console.log(result[0].club_id);
+
+            var new_winner = new Winner({
+              member_id: result[0].member_id,
+            });
+
+            new_winner.save(function (err, doc) { 
+              if (err) {
+                console.log(err);
+
+              } else {
+                console.log("saved: " + result[0].member_id);
+
+              }
+            });
+          }
+        });
+
+       }
+
+     }, function(err) {
+      console.log(err);
+    });
+
+
+
+
+
+
+    }
+
+    const generateReport = (results) => {
+
+      let user = {
+        results
+      };
+
+      console.log(results);
+
+
+      sendEmail("david@thisisparachute.com", "CLUB REPORT", user, "report");
+
+
+    }
+
+    const saveWinner = (member_id, club_id, email, first_name, last_name) => {
 
       var new_winner = new Winner({
-        member_id: result[0].member_id,
+        member_id,
+        club_id,
+        email,
+        first_name,
+        last_name
       });
 
       new_winner.save(function (err, doc) { 
         if (err) {
           console.log(err);
-          
+
         } else {
-          console.log("saved: " + result[0].member_id);
+          console.log("saved: " + member_id);
 
         }
       });
-    }
-  });
-
- }
-
-}, function(err) {
-  console.log(err);
-});
-
-
-
-
-
-
-}
-
-const generateReport = (results) => {
-
-  let user = {
-    results
-  };
-
-  console.log(results);
-
-
-  sendEmail("david@thisisparachute.com", "CLUB REPORT", user, "report");
-
-
-}
-
-const saveWinner = (member_id, club_id, email, first_name, last_name) => {
-
-  var new_winner = new Winner({
-    member_id,
-    club_id,
-    email,
-    first_name,
-    last_name
-  });
-
-  new_winner.save(function (err, doc) { 
-    if (err) {
-      console.log(err);
-
-    } else {
-      console.log("saved: " + member_id);
 
     }
-  });
 
-}
-
-const saveBooking = (booking_ref, booking_date, member_id, club_id, amount_paid, booking_mode, res) => {
+    const saveBooking = (booking_ref, booking_date, member_id, club_id, amount_paid, booking_mode, res) => {
 
 
 
-  var new_booking = new Booking({
-    booking_date,
-    booking_ref,
-    member_id,
-    club_id,
-    amount_paid,
-    booking_mode
-  }); 
-  console.log(new_booking);
+      var new_booking = new Booking({
+        booking_date,
+        booking_ref,
+        member_id,
+        club_id,
+        amount_paid,
+        booking_mode
+      }); 
+      console.log(new_booking);
 
-  new_booking.save(function (err, doc) { 
-    if (err) {
-      console.log(err);
-      res.send("false");
+      new_booking.save(function (err, doc) { 
+        if (err) {
+          console.log(err);
+          res.send("false");
 
-    } else {
-      res.send("true");
+        } else {
+          res.send("true");
 
-    }
-  });
-
-}
-
-const getLoyalty = (member_id, res) => {
-
-  let users = User.find({member_id}).then(function(doc) {  
-    console.log(doc);
-    console.log(`Retrieved Loyalty Points: ${doc[0].loyalty_points} `);
-    res.send(`${doc[0].loyalty_points}`);
-
-
-  }, function(err) {
-    console.log(err);
-    res.send(`Loyalty Error `);
-
-  });
-
-}
-
-const getLoyaltyOffers = () => {
-
-}
-
-const updateLoyalty = (member_id, points, res) => {
-
-  User.find({member_id}).then(function(doc) {  
-
-
-
-    if (doc != null && doc[0] != null){
-
-      console.log(doc[0]);
-      console.log("here");
-      console.log(doc[0].loyalty_points + points);
-
-      const newPoints = doc[0].loyalty_points + points;
-
-
-      User.findOneAndUpdate(
-        { member_id },
-        {loyalty_points: newPoints },
-        {new: true }
-        ,
-        function (err, doc) { 
-          console.log("HERE2");
-          console.log(doc);
         }
-        ).then(function(doc){
-          console.log(doc);
+      });
 
-          res.send(`${newPoints}`);
+    }
+
+    const getLoyalty = (member_id, res) => {
+
+      let users = User.find({member_id}).then(function(doc) {  
+        console.log(doc);
+        console.log(`Retrieved Loyalty Points: ${doc[0].loyalty_points} `);
+        res.send(`${doc[0].loyalty_points}`);
+
+
+      }, function(err) {
+        console.log(err);
+        res.send(`Loyalty Error `);
+
+      });
+
+    }
+
+    const getLoyaltyOffers = () => {
+
+    }
+
+    const updateLoyalty = (member_id, points, res) => {
+
+      User.find({member_id}).then(function(doc) {  
+
+
+
+        if (doc != null && doc[0] != null){
+
+          console.log(doc[0]);
+          console.log("here");
+          console.log(doc[0].loyalty_points + points);
+
+          const newPoints = doc[0].loyalty_points + points;
+
+
+          User.findOneAndUpdate(
+            { member_id },
+            {loyalty_points: newPoints },
+            {new: true }
+            ,
+            function (err, doc) { 
+              console.log("HERE2");
+              console.log(doc);
+            }
+            ).then(function(doc){
+              console.log(doc);
+
+              res.send(`${newPoints}`);
+
+            }).catch(function(err){
+              res.send(`Loyalty Error ${newPoints}`);
+
+            });
+
+
+
+
+          }else{
+
+            res.send(`no updated`);
+
+          }
+
+
 
         }).catch(function(err){
-          res.send(`Loyalty Error ${newPoints}`);
+          res.send(`Loyalty Error last`);
 
         });
 
 
 
 
-      }else{
-
-        res.send(`no updated`);
-
       }
 
 
+      const redeemWinner = (member_id, res) => {
 
-    }).catch(function(err){
-      res.send(`Loyalty Error last`);
+        Winner.findOneAndUpdate(
+          { member_id, redeemed: false },
+          { $set: { redeemed: true, redeemed_at: Date() }},
+          null,
+          function (err, doc) { 
+            if (err) {
+              console.log(err);
+                                                  res.send(`{ "error": "No Winner"}`);
 
-    });
+              return false;
+            } else {
+              console.log(doc);
+              if (doc != null){
+                console.log("redeemed: " + member_id);
+                let user = {
+                  email: doc.email,
+                  first_name: doc.first_name,
+                  last_name: doc.last_name,
+                  club_id: doc.club_id,
+                  redeemedDate: doc.redeemedDate,
+                  createdDate: doc.created_at
+                }
+                sendEmail(doc.email, "SUBJECT", user, "email");
+                    res.send(`Redeemed Winner`);
 
+                return doc;
+              }else{
+                                    res.send(`{ "error": "No Winner"}`);
 
-
-
-  }
-
-
-  const redeemWinner = (member_id) => {
-
-    Winner.findOneAndUpdate(
-      { member_id, redeemed: false },
-      { $set: { redeemed: true, redeemed_at: Date() }},
-      null,
-      function (err, doc) { 
-        if (err) {
-          console.log(err);
-          return false;
-        } else {
-          console.log(doc);
-          if (doc != null){
-            console.log("redeemed: " + member_id);
-            let user = {
-              email: doc.email,
-              first_name: doc.first_name,
-              last_name: doc.last_name,
-              club_id: doc.club_id,
-              redeemedDate: doc.redeemedDate,
-              createdDate: doc.created_at
+                return false;
+              }
             }
-            sendEmail(doc.email, "SUBJECT", user, "email");
-            return doc;
-          }else{
-            return false;
-          }
+          } 
+          );
+      }
+
+      app.use(bodyParser.json()); 
+      app.use(bodyParser.urlencoded({extended: false}));
+
+      app.get('/', (req, res) => {
+        res.send('Push Notification Server Running');
+      });
+
+      app.get('/offers', (req, res) => {
+        getOffers(res);
+      });
+
+      app.put('/offers', (req, res) => {
+        if (req.get('api-key') == apikey) {
+          console.log("applying");
+
+          updateOffer(req.body.id, req.body.name, req.body.description, req.body.loyalty_points_required, res);
+        }else{
+          res.send('{ "error": "No Auth"}');
+          ;
         }
-      } 
-      );
-  }
-
-  app.use(bodyParser.json()); 
-  app.use(bodyParser.urlencoded({extended: false}));
-
-  app.get('/', (req, res) => {
-    res.send('Push Notification Server Running');
-  });
-
-  app.get('/offers', (req, res) => {
-    getOffers(res);
-  });
-
-  app.put('/offers', (req, res) => {
-    if (req.get('api-key') == apikey) {
-
-      updateOffer(req.body.id, req.body.name, req.body.description, req.body.loyalty_points_required, res);
-    }else{
-        res.send('{ "error": "No Auth"}');
-;
-   }
- });
+      });
 
 
-  app.post('/offers', (req, res) => {
-    if (req.get('api-key') == apikey) {
-      createOffer( req.body.name, req.body.description, req.body.loyalty_points_required, res);
-    }else{
-        res.send('{ "error": "No Auth"}');
-;
-   }
- });
+      app.post('/offers', (req, res) => {
+        if (req.get('api-key') == apikey) {
+          createOffer( req.body.name, req.body.description, req.body.loyalty_points_required, res);
+        }else{
+          res.send('{ "error": "No Auth"}');
+          ;
+        }
+      });
 
 // app.post('/winner', (req, res) => {
 //   saveWinner(req.body.member_id, req.body.club_id, req.body.email, req.body.first_name, req.body.last_name );
@@ -558,29 +567,23 @@ app.post('/winner/redeem', (req, res) => {
 
   if (req.get('api-key') == apikey) {
 
-    redeemWinner(req.body.member_id );
-    console.log(`Redeemed Winner: ${req.body.member_id}`);
-    res.send(`Rede emed Winner, ${req.body.member_id}`);
+    redeemWinner(req.body.member_id,res );
 
   }else{
-      res.send('{ "error": "No Auth"}');
-;
-
- }
+    res.send('{ "error": "No Auth"}');
+  }
 });
 
 app.post('/loyalty', (req, res) => {
 
-
-
-    updateLoyalty(req.body.member_id, req.body.loyalty_points,res);
+  updateLoyalty(req.body.member_id, req.body.loyalty_points,res);
 
 }); 
 
 app.get('/loyalty/:member_id', (req, res) => {
 
-    console.log(req.params.member_id);
-    getLoyalty(req.params.member_id, res);
+  console.log(req.params.member_id);
+  getLoyalty(req.params.member_id, res);
 
 });
 
@@ -639,8 +642,8 @@ app.post('/message', (req, res) => {
 
 
 }else{
-    res.send('{ "error": "No Auth"}');
-;
+  res.send('{ "error": "No Auth"}');
+  ;
 
 }
 }
@@ -662,8 +665,8 @@ app.post('/booking', (req, res) => {
 
 
 
-    saveBooking(req.body.booking_ref, req.body.booking_date, req.body.member_id, req.body.club_id, req.body.amount_paid, req.body.booking_mode, res );
-    console.log(`Received Booking: ${req.body.member_id}`);
+  saveBooking(req.body.booking_ref, req.body.booking_date, req.body.member_id, req.body.club_id, req.body.amount_paid, req.body.booking_mode, res );
+  console.log(`Received Booking: ${req.body.member_id}`);
 
 });
 
@@ -674,10 +677,9 @@ app.post('/winners/choose', (req, res) => {
     res.send(`Getting Tonights Winners, ${req.body.member_id}`);
 
   }else{
-      res.send('{ "error": "No Auth"}');
-;
+    res.send('{ "error": "No Auth"}');
 
- }
+  }
 });
 
 app.post('/message/:member_id', (req, res) => {
@@ -715,8 +717,8 @@ app.post('/message/:member_id', (req, res) => {
     res.send(`not allowed to send - IP rejected`);
   }
 }else{
-    res.send('{ "error": "No Auth"}');
-;
+  res.send('{ "error": "No Auth"}');
+  ;
 
 }
 
@@ -728,7 +730,7 @@ app.post('/message/:member_id', (req, res) => {
 app.get('/winner/verify/:member_id', (req,res) => {
 
 
-    verifyWinner(req.params.member_id, res);
+  verifyWinner(req.params.member_id, res);
 
 });
 
