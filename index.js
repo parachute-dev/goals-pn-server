@@ -303,6 +303,7 @@ const saveToken = (token, device_type, member_id, res) => {
        };
 
        sendEmail(doc[0].email, "You've won a free game at Goals!", user, "winner");
+    handlePushTokens("You've won a FREE game! Just use the QuickPay option in the app to redeem.", "You've won a free game at Goals!", member_id);
 
 
      }, function(err) {
