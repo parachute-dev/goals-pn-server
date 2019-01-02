@@ -488,7 +488,7 @@ const saveToken = (token, device_type, member_id, res) => {
 
 
       const redeemWinner = (member_id, res) => {
-
+console.log(member_id);
         Winner.findOneAndUpdate(
           { member_id, redeemed: false },
           { $set: { redeemed: true, redeemed_at: Date() }},
@@ -513,10 +513,12 @@ const saveToken = (token, device_type, member_id, res) => {
                 }
                 //sendEmail(doc.email, "SUBJECT", user, "email");
                     res.send(`{"success": "Redeemed"}`);
+console.log("redeemed");
 
                 return doc;
               }else{
                                     res.send(`{ "error": "No Winner"}`);
+console.log("no reedeem");
 
                 return false;
               }
