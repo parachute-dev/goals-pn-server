@@ -139,7 +139,7 @@ const updateOffer = (_id, name, description, loyalty_points_required, res) => {
   // Setup email data.
   var mailOptions = {
     to: email,
-    subject: 'Email from SMTP sever',
+    subject,
     user
   }
 
