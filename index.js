@@ -511,7 +511,7 @@ const saveToken = (token, device_type, member_id, res) => {
                   redeemedDate: doc.redeemedDate,
                   createdDate: doc.created_at
                 }
-                sendEmail(doc.email, "SUBJECT", user, "email");
+                //sendEmail(doc.email, "SUBJECT", user, "email");
                     res.send(`{"success": "Redeemed"}`);
 
                 return doc;
@@ -565,8 +565,9 @@ const saveToken = (token, device_type, member_id, res) => {
 
 app.post('/winner/redeem', (req, res) => {
 
+console.log(req.get('api-key'));
   if (req.get('api-key') == apikey) {
-
+console.log("redeeming...");
     redeemWinner(req.body.member_id,res );
 
   }else{
