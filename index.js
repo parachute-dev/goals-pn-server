@@ -290,7 +290,26 @@ const saveToken = (token, device_type, member_id, res) => {
     }
 
 
+    const messageWinners = (member_id) => {
 
+
+      let users = User.find({member_id}).then(function(doc) {  
+        console.log(doc);
+
+
+        let user = {
+         first_name: doc[0].first_name,
+         last_name: doc[0].last_name,
+       };
+
+       sendEmail(doc[0].email, "WINNER", user, "winner");
+
+
+     }, function(err) {
+      console.log(err);
+
+    });
+    }
     const getTonightsWinners = () =>{
 
       console.log("GETTINGWINNERS");
@@ -312,34 +331,36 @@ const saveToken = (token, device_type, member_id, res) => {
           console.log(club.Name);
 
 
-         Booking.findRandom({club_id: club.Name}, {}, {limit: 1}, function(err, result) {
+          Booking.findRandom({club_id: club.Name}, {}, {limit: 1}, function(err, result) {
 
 
 
-          if (!err && result != null) {
-            console.log(result[0].club_id);
+            if (!err && result != null) {
+              console.log(result[0].club_id);
 
-            var new_winner = new Winner({
-              member_id: result[0].member_id,
-            });
+              var new_winner = new Winner({
+                member_id: result[0].member_id,
+                created_at: Date()
+              });
 
-            new_winner.save(function (err, doc) { 
-              if (err) {
-                console.log(err);
+              new_winner.save(function (err, doc) { 
+                if (err) {
+                  console.log(err);
 
-              } else {
-                console.log("saved: " + result[0].member_id);
+                } else {
+                  console.log("saved: " + result[0].member_id);
+                  messageWinners(result[0].member_id);
 
-              }
-            });
-          }
-        });
+                }
+              });
+            }
+          });
 
-       }
+        }
 
-     }, function(err) {
-      console.log(err);
-    });
+      }, function(err) {
+        console.log(err);
+      });
 
 
 
@@ -488,7 +509,7 @@ const saveToken = (token, device_type, member_id, res) => {
 
 
       const redeemWinner = (member_id, res) => {
-console.log(member_id);
+        console.log(member_id);
         Winner.findOneAndUpdate(
           { member_id, redeemed: false },
           { $set: { redeemed: true, redeemed_at: Date() }},
@@ -496,7 +517,7 @@ console.log(member_id);
           function (err, doc) { 
             if (err) {
               console.log(err);
-                                                  res.send(`{ "error": "No Winner"}`);
+              res.send(`{ "error": "No Winner"}`);
 
               return false;
             } else {
@@ -512,13 +533,13 @@ console.log(member_id);
                   createdDate: doc.created_at
                 }
                 //sendEmail(doc.email, "SUBJECT", user, "email");
-                    res.send(`{"success": "Redeemed"}`);
-console.log("redeemed");
+                res.send(`{"success": "Redeemed"}`);
+                console.log("redeemed");
 
                 return doc;
               }else{
-                                    res.send(`{ "error": "No Winner"}`);
-console.log("no reedeem");
+                res.send(`{ "error": "No Winner"}`);
+                console.log("no reedeem");
 
                 return false;
               }
@@ -567,9 +588,10 @@ console.log("no reedeem");
 
 app.post('/winner/redeem', (req, res) => {
 
-console.log(req.body.member_id);
+  console.log(req.body);
+  console.log(req.body);
 
-    redeemWinner(req.body.member_id, res );
+  redeemWinner(req.body.member_id, res );
 
 
 });
