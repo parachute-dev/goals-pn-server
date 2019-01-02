@@ -567,6 +567,7 @@ console.log("no reedeem");
 
 app.post('/winner/redeem', (req, res) => {
 
+console.log(req.body.member_id);
 
     redeemWinner(req.body.member_id, res );
 
