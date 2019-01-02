@@ -567,14 +567,10 @@ console.log("no reedeem");
 
 app.post('/winner/redeem', (req, res) => {
 
-console.log(req.get('api-key'));
-  if (req.get('api-key') == apikey) {
-console.log("redeeming...");
-    redeemWinner(req.body.member_id,res );
 
-  }else{
-    res.send('{ "error": "No Auth"}');
-  }
+    redeemWinner(req.body.member_id, res );
+
+
 });
 
 app.post('/loyalty', (req, res) => {
