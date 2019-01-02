@@ -302,7 +302,7 @@ const saveToken = (token, device_type, member_id, res) => {
          last_name: doc[0].last_name,
        };
 
-       sendEmail(doc[0].email, "WINNER", user, "winner");
+       sendEmail(doc[0].email, "You've won a free game at Goals!", user, "winner");
 
 
      }, function(err) {
