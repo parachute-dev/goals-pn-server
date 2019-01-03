@@ -305,8 +305,8 @@ const saveToken = (token, device_type, member_id, res) => {
 
         let club = {
          name: doc[0].first_name + " " + doc[0].last_name,
-         email: club_email;
-         club: club_id ;
+         email: club_email,
+         club: club_id
        };
 
        sendEmail("david@thisisparachute.com", "You've won a free game at Goals!", user, "winner");
