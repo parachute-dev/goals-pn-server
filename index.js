@@ -510,7 +510,7 @@ const saveToken = (token, device_type, member_id, res) => {
 
 
       const redeemWinner = (member_id, res) => {
-        console.log(member_id);
+        console.log("member id:" + member_id);
         Winner.findOneAndUpdate(
           { member_id, redeemed: false },
           { $set: { redeemed: true, redeemed_at: Date() }},
@@ -589,6 +589,7 @@ const saveToken = (token, device_type, member_id, res) => {
 
 app.post('/winner/redeem', (req, res) => {
 
+  console.log("winner/redeem");
   console.log(req.body);
   console.log(req.body);
 
