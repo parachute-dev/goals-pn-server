@@ -309,8 +309,8 @@ const saveToken = (token, device_type, member_id, res) => {
          club: club_id ;
        };
 
-       sendEmail(doc[0].email, "You've won a free game at Goals!", user, "winner");
-              sendEmail(club_email , "Someone's won a free game", club, "winner-club");
+       sendEmail("david@thisisparachute.com", "You've won a free game at Goals!", user, "winner");
+              sendEmail("david@thisisparachute.com", "Someone's won a free game", club, "winner-club");
 
     handlePushTokens("You've won a FREE game! Just use the QuickPay option in the app to redeem.", "You've won a free game at Goals!", member_id);
 
