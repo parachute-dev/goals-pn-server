@@ -621,7 +621,6 @@ app.post('/token', (req, res) => {
   console.log(req.body.device_type);
   saveToken(req.body.token, req.body.device_type, req.body.member_id ,res);
 
-  res.send('{ "error": "No Auth"}');
 
 });
 
