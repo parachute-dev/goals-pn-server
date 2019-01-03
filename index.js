@@ -290,8 +290,9 @@ const saveToken = (token, device_type, member_id, res) => {
     }
 
 
-    const messageWinners = (member_id) => {
+    const messageWinners = (member_id,club_id) => {
 
+      const club_email = club_id.replace(/\s+/g, '-').toLowerCase() + "@" +"goalsfootball.co.uk";
 
       let users = User.find({member_id}).then(function(doc) {  
         console.log(doc);
@@ -302,8 +303,21 @@ const saveToken = (token, device_type, member_id, res) => {
          last_name: doc[0].last_name,
        };
 
+        let club = {
+         name: doc[0].first_name + " " + doc[0].last_name,
+         email: club_email;
+         club: club_id ;
+       };
+
        sendEmail(doc[0].email, "You've won a free game at Goals!", user, "winner");
+              sendEmail(club_email , "Someone's won a free game", club, "winner-club");
+
     handlePushTokens("You've won a FREE game! Just use the QuickPay option in the app to redeem.", "You've won a free game at Goals!", member_id);
+
+
+
+
+
 
 
      }, function(err) {
@@ -350,7 +364,7 @@ const saveToken = (token, device_type, member_id, res) => {
 
                 } else {
                   console.log("saved: " + result[0].member_id);
-                  messageWinners(result[0].member_id);
+                  messageWinners(result[0].member_id, result[0].club_id);
 
                 }
               });
@@ -678,10 +692,11 @@ app.post('/user', (req, res) => {
     first_name: req.body.first_name,
     last_name: req.body.last_name,
     email:  req.body.email_address,
-    member_id: req.body.member_id,
+    member_id: req.body.member_id
 
   });
-  createUpdateUser(user, res)
+  createUpdateUser(user, res);
+
 });
 
 app.post('/booking', (req, res) => {
