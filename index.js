@@ -306,6 +306,7 @@ const saveToken = (token, device_type, member_id, res) => {
          club: club_id,
          booking_ref: doc[0].booking_ref,
          member_id: doc[0].member_id,
+         booking_date: doc[0].booking_date,
 
        };
 
