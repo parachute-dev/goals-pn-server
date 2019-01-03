@@ -303,7 +303,9 @@ const saveToken = (token, device_type, member_id, res) => {
          last_name: doc[0].last_name,
          name: doc[0].first_name + " " + doc[0].last_name,
          email: club_email,
-         club: club_id
+         club: club_id,
+         booking_ref: doc[0].booking_ref,
+         member_id: doc[0].member_id,
 
        };
 
