@@ -290,7 +290,7 @@ const saveToken = (token, device_type, member_id, res) => {
     }
 
 
-    const messageWinners = (member_id,club_id) => {
+    const messageWinners = (member_id,club_id,ref,booking_date) => {
 
       const club_email = club_id.replace(/\s+/g, '-').toLowerCase() + "@" +"goalsfootball.co.uk";
 
@@ -304,9 +304,9 @@ const saveToken = (token, device_type, member_id, res) => {
          name: doc[0].first_name + " " + doc[0].last_name,
          email: club_email,
          club: club_id,
-         booking_ref: doc[0].booking_ref,
+         booking_ref: ref,
          member_id: doc[0].member_id,
-         booking_date: doc[0].booking_date,
+         booking_date:booking_date,
 
        };
 
@@ -367,7 +367,7 @@ const saveToken = (token, device_type, member_id, res) => {
 
                 } else {
                   console.log("saved: " + result[0].member_id);
-                  messageWinners(result[0].member_id, result[0].club_id);
+                  messageWinners(result[0].member_id, result[0].club_id, result[0].booking_ref, result[0].booking_date );
 
                 }
               });
