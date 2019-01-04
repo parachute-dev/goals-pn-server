@@ -312,8 +312,8 @@ const saveToken = (token, device_type, member_id, res) => {
 
       
 
-       sendEmail("david@thisisparachute.com", "You've won a free game at Goals!", user, "winner");
-      sendEmail("david@thisisparachute.com", "Someone's won a free game", user, "winner-club");
+       sendEmail(doc[0].email, "You've won a free game at Goals!", user, "winner");
+      sendEmail(club_email, "Someone's won a free game", user, "winner-club");
 
     handlePushTokens("You've won a FREE game! Just use the QuickPay option in the app to redeem.", "You've won a free game at Goals!", member_id);
 
@@ -433,7 +433,8 @@ const saveToken = (token, device_type, member_id, res) => {
         member_id,
         club_id,
         amount_paid,
-        booking_mode
+        booking_mode,
+        created_at: Date()
       }); 
       console.log(new_booking);
 
@@ -519,12 +520,7 @@ const saveToken = (token, device_type, member_id, res) => {
           res.send(`Loyalty Error last`);
 
         });
-
-
-
-
       }
-
 
       const redeemWinner = (member_id, res) => {
         console.log("member id:" + member_id);
