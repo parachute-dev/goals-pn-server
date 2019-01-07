@@ -327,12 +327,12 @@ const saveToken = (token, device_type, member_id, res) => {
 
        };
 
-      
+
 
        sendEmail(doc[0].email, "You've won a free game at Goals!", user, "winner");
-      sendEmail(club_email, "Someone's won a free game", user, "winner-club");
+       sendEmail(club_email, "Someone's won a free game", user, "winner-club");
 
-    handlePushTokens("You've won a FREE game! Just use the QuickPay option in the app to redeem.", "You've won a free game at Goals!", member_id);
+       handlePushTokens("You've won a FREE game! Just use the QuickPay option in the app to redeem.", "You've won a free game at Goals!", member_id);
 
 
 
@@ -376,6 +376,7 @@ const saveToken = (token, device_type, member_id, res) => {
               var new_winner = new Winner({
                 member_id: result[0].member_id,
                 created_at: Date()
+                club: club.Name
               });
 
               new_winner.save(function (err, doc) { 
@@ -717,7 +718,7 @@ app.post('/user', (req, res) => {
 
 
 app.get('/winners', (req, res) => {
-   if (req.get('api-key') == apikey) {
+ if (req.get('api-key') == apikey) {
   getWinners(res);
 }
 });
