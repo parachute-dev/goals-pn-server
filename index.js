@@ -63,7 +63,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 const getWinners = (res) =>{
 
-  Winners.find({} , (err, users) => {
+  Winner.find({} , (err, users) => {
 
   }).then(function(doc){
     console.log(doc);
