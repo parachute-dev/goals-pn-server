@@ -660,26 +660,12 @@ app.post('/message', (req, res) => {
      let title = null;
      let message = null;
 
-     if (req.body.message != null && req.body.message != ""){
-      message = req.body.message;
-    }
 
-    if (req.body.title != null && req.body.title != ""){
-      title = req.body.title;
-    }
-
-    if (req.query.message != null && req.query.message != ""){
-      message = req.query.message;
-    }
-
-    if (req.query.title != null && req.query.title != ""){
-      title = req.query.title;
-    }
 
 console.log(message);
 console.log(title);
 
-    handlePushTokens(message, title, req.params.member_id);
+    handlePushTokens(req.body.message, req.body.title, req.params.member_id);
     res.send(`${message}`);
 
   }else{
