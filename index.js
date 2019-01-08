@@ -222,19 +222,19 @@ const handlePushTokens = (message, title, member_id) => {
         });
 
 
-        // let chunks = expo.chunkPushNotifications(notifications);
+        let chunks = expo.chunkPushNotifications(notifications);
 
-        // (async () => {
+        (async () => {
 
-        //   for (let chunk of chunks) {
-        //     try {
-        //       let receipts = await expo.sendPushNotificationsAsync(chunk);
-        //       console.log(receipts);
-        //     } catch (error) {
-        //       console.error(error);
-        //     }
-        //   }
-        // })();
+          for (let chunk of chunks) {
+            try {
+              let receipts = await expo.sendPushNotificationsAsync(chunk);
+              console.log(receipts);
+            } catch (error) {
+              console.error(error);
+            }
+          }
+        })();
 
       });
 }
