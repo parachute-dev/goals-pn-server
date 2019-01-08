@@ -37,9 +37,9 @@ mailer.extend(app, {
   port: 2525, // port for secure SMTP
   transportMethod: 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts
   auth: {
-  user: 'david@parachute.net', // gmail id
-  pass: '0450b241-e37e-41d1-a17f-7574b695488d' // gmail password
-}
+    user: 'david@parachute.net', // gmail id
+    pass: '0450b241-e37e-41d1-a17f-7574b695488d' // gmail password
+  }
 });
 
 //Set up default mongoose connection
@@ -173,6 +173,12 @@ const updateOffer = (_id, name, description, loyalty_points_required, res) => {
 }
 
 const handlePushTokens = (message, title, member_id) => {
+  console.log("member_id: " + member_id);
+
+  console.log("message: " + message);
+  console.log("title: " + title);
+
+
   // Create the messages that you want to send to clents
   let notifications = [];
 
@@ -184,9 +190,6 @@ const handlePushTokens = (message, title, member_id) => {
     }
   }
 
-  console.log(member_id);
-  console.log(message);
-  console.log(title);
 
   Token.find(params , (err, users) => {
         if(err) //do something...
@@ -219,19 +222,19 @@ const handlePushTokens = (message, title, member_id) => {
         });
 
 
-        let chunks = expo.chunkPushNotifications(notifications);
+        // let chunks = expo.chunkPushNotifications(notifications);
 
-        (async () => {
+        // (async () => {
 
-          for (let chunk of chunks) {
-            try {
-              let receipts = await expo.sendPushNotificationsAsync(chunk);
-              console.log(receipts);
-            } catch (error) {
-              console.error(error);
-            }
-          }
-        })();
+        //   for (let chunk of chunks) {
+        //     try {
+        //       let receipts = await expo.sendPushNotificationsAsync(chunk);
+        //       console.log(receipts);
+        //     } catch (error) {
+        //       console.error(error);
+        //     }
+        //   }
+        // })();
 
       });
 }
@@ -309,7 +312,9 @@ const saveToken = (token, device_type, member_id, res) => {
 
     const messageWinners = (member_id,club_id,ref,booking_date) => {
 
-      const club_email = club_id.replace(/\s+/g, '-').toLowerCase() + "@" +"goalsfootball.co.uk";
+      let club_email = club_id.replace(/\s+/g, '').toLowerCase() + "@" +"goalsfootball.co.uk";
+      club_email = club_id.replace("birminghamperryparr",'perrybarr').toLowerCase() + "@" +"goalsfootball.co.uk";
+      club_email = club_id.replace("birminghamstarcity",'birmingham').toLowerCase() + "@" +"goalsfootball.co.uk";
 
       let users = User.find({member_id}).then(function(doc) {  
 
@@ -325,11 +330,9 @@ const saveToken = (token, device_type, member_id, res) => {
          booking_date:booking_date,
 
        };
-
        sendEmail(doc[0].email, "You've won a free game at Goals!", user, "winner");
-       sendEmail(club_email, "Someone's won a free game", user, "winner-club");
-
-       handlePushTokens("You've won a FREE game! Just use the QuickPay option in the app to redeem.", "You've won a free game at Goals!", member_id);
+       //sendEmail(club_email, "Someone's won a free game", user, "winner-club");
+       handlePushTokens("You've won a FREE game! Just use the QuickPay option in the app to redeem.", "You've won a free game!", member_id);
 
 
      }, function(err) {
@@ -348,12 +351,12 @@ const saveToken = (token, device_type, member_id, res) => {
         }
       }).then(function(doc){
 
-    
-if (!doc.length) {       
 
- var result = [];
+        if (!doc.length) {       
 
-        let response = Club.find({}, (err, clubs) => {
+         var result = [];
+
+         let response = Club.find({}, (err, clubs) => {
           if (!err){
 
           }
@@ -392,8 +395,8 @@ if (!doc.length) {
         });
 
 
-}
-    
+      }
+
 
 
     }).catch(function(err){
@@ -402,172 +405,159 @@ if (!doc.length) {
       console.log(err);
     });
 
-
-
-
-
-
-
-
   }
 
   const generateReport = (results) => {
 
-    let user = {
-      results
-    };
+   let user = {
+   }
+   sendEmail("david@thisisparachute.com", "APP PAYMENT REPORT", user, "report");
 
-    console.log(results);
+ }
 
+ const saveWinner = (member_id, club_id, email, first_name, last_name) => {
 
-    sendEmail("david@thisisparachute.com", "CLUB REPORT", user, "report");
+  var new_winner = new Winner({
+    member_id,
+    club_id,
+    email,
+    first_name,
+    last_name
+  });
 
+  new_winner.save(function (err, doc) { 
+    if (err) {
 
-  }
+    } else {
 
-  const saveWinner = (member_id, club_id, email, first_name, last_name) => {
-
-    var new_winner = new Winner({
-      member_id,
-      club_id,
-      email,
-      first_name,
-      last_name
-    });
-
-    new_winner.save(function (err, doc) { 
-      if (err) {
-
-      } else {
-
-      }
-    });
-
-  }
-
-  const saveBooking = (booking_ref, booking_date, member_id, club_id, amount_paid, booking_mode, res) => {
-
-
-
-    var new_booking = new Booking({
-      booking_date,
-      booking_ref,
-      member_id,
-      club_id,
-      amount_paid,
-      booking_mode,
-      created_at: Date()
-    }); 
-    console.log(new_booking);
-
-    new_booking.save(function (err, doc) { 
-      if (err) {
-        console.log(err);
-        res.send("false");
-
-      } else {
-        res.send("true");
-
-      }
-    });
-
-  }
-
-  const getLoyalty = (member_id, res) => {
-
-    let users = User.find({member_id}).then(function(doc) {  
-      console.log(doc);
-      console.log(`Retrieved Loyalty Points: ${doc[0].loyalty_points} `);
-      res.send(`${doc[0].loyalty_points}`);
-
-
-    }, function(err) {
-      console.log(err);
-      res.send(`Loyalty Error `);
-
-    });
-
-  }
-
-  const getLoyaltyOffers = () => {
-
-  }
-
-  const updateLoyalty = (member_id, points, res) => {
-
-    User.find({member_id}).then(function(doc) {  
-
-
-
-      if (doc != null && doc[0] != null){
-
-        console.log(doc[0]);
-        console.log("here");
-        console.log(doc[0].loyalty_points + points);
-
-        const newPoints = doc[0].loyalty_points + points;
-
-
-        User.findOneAndUpdate(
-          { member_id },
-          {loyalty_points: newPoints },
-          {new: true }
-          ,
-          function (err, doc) { 
-            console.log("HERE2");
-            console.log(doc);
-          }
-          ).then(function(doc){
-            console.log(doc);
-
-            res.send(`${newPoints}`);
-
-          }).catch(function(err){
-            res.send(`Loyalty Error ${newPoints}`);
-
-          });
-
-
-
-
-        }else{
-
-          res.send(`no updated`);
-
-        }
-
-
-
-      }).catch(function(err){
-        res.send(`Loyalty Error last`);
-
-      });
     }
+  });
 
-    const redeemWinner = (member_id, res) => {
-      console.log("member id:" + member_id);
-      Winner.findOneAndUpdate(
-        { member_id, redeemed: false },
-        { $set: { redeemed: true, redeemed_at: Date() }},
-        null,
+}
+
+const saveBooking = (booking_ref, booking_date, member_id, club_id, amount_paid, booking_mode, res) => {
+
+
+
+  var new_booking = new Booking({
+    booking_date,
+    booking_ref,
+    member_id,
+    club_id,
+    amount_paid,
+    booking_mode,
+    created_at: Date()
+  }); 
+  console.log(new_booking);
+
+  new_booking.save(function (err, doc) { 
+    if (err) {
+      console.log(err);
+      res.send("false");
+
+    } else {
+      res.send("true");
+
+    }
+  });
+
+}
+
+const getLoyalty = (member_id, res) => {
+
+  let users = User.find({member_id}).then(function(doc) {  
+    console.log(doc);
+    console.log(`Retrieved Loyalty Points: ${doc[0].loyalty_points} `);
+    res.send(`${doc[0].loyalty_points}`);
+
+
+  }, function(err) {
+    console.log(err);
+    res.send(`Loyalty Error `);
+
+  });
+
+}
+
+const getLoyaltyOffers = () => {
+
+}
+
+const updateLoyalty = (member_id, points, res) => {
+
+  User.find({member_id}).then(function(doc) {  
+
+
+
+    if (doc != null && doc[0] != null){
+
+      console.log(doc[0]);
+      console.log("here");
+      console.log(doc[0].loyalty_points + points);
+
+      const newPoints = doc[0].loyalty_points + points;
+
+
+      User.findOneAndUpdate(
+        { member_id },
+        {loyalty_points: newPoints },
+        {new: true }
+        ,
         function (err, doc) { 
-          if (err) {
-            console.log(err);
-            res.send(`{ "error": "No Winner"}`);
+          console.log("HERE2");
+          console.log(doc);
+        }
+        ).then(function(doc){
+          console.log(doc);
 
-            return false;
-          } else {
-            console.log(doc);
-            if (doc != null){
-              console.log("redeemed: " + member_id);
-              let user = {
-                email: doc.email,
-                first_name: doc.first_name,
-                last_name: doc.last_name,
-                club_id: doc.club_id,
-                redeemedDate: doc.redeemedDate,
-                createdDate: doc.created_at
-              }
+          res.send(`${newPoints}`);
+
+        }).catch(function(err){
+          res.send(`Loyalty Error ${newPoints}`);
+
+        });
+
+
+
+
+      }else{
+
+        res.send(`no updated`);
+
+      }
+
+
+
+    }).catch(function(err){
+      res.send(`Loyalty Error last`);
+
+    });
+  }
+
+  const redeemWinner = (member_id, res) => {
+    console.log("member id:" + member_id);
+    Winner.findOneAndUpdate(
+      { member_id, redeemed: false },
+      { $set: { redeemed: true, redeemed_at: Date() }},
+      null,
+      function (err, doc) { 
+        if (err) {
+          console.log(err);
+          res.send(`{ "error": "No Winner"}`);
+
+          return false;
+        } else {
+          console.log(doc);
+          if (doc != null){
+            console.log("redeemed: " + member_id);
+            let user = {
+              email: doc.email,
+              first_name: doc.first_name,
+              last_name: doc.last_name,
+              club_id: doc.club_id,
+              redeemedDate: doc.redeemedDate,
+              createdDate: doc.created_at
+            }
                 //sendEmail(doc.email, "SUBJECT", user, "email");
                 res.send(`{"success": "Redeemed"}`);
                 console.log("redeemed");
@@ -582,39 +572,39 @@ if (!doc.length) {
             }
           } 
           );
+  }
+
+  app.use(bodyParser.json()); 
+  app.use(bodyParser.urlencoded({extended: false}));
+
+  app.get('/', (req, res) => {
+    res.send('Push Notification Server Running');
+  });
+
+  app.get('/offers', (req, res) => {
+    getOffers(res);
+  });
+
+  app.put('/offers', (req, res) => {
+    if (req.get('api-key') == apikey) {
+      console.log("applying");
+
+      updateOffer(req.body.id, req.body.name, req.body.description, req.body.loyalty_points_required, res);
+    }else{
+      res.send('{ "error": "No Auth"}');
+      ;
     }
-
-    app.use(bodyParser.json()); 
-    app.use(bodyParser.urlencoded({extended: false}));
-
-    app.get('/', (req, res) => {
-      res.send('Push Notification Server Running');
-    });
-
-    app.get('/offers', (req, res) => {
-      getOffers(res);
-    });
-
-    app.put('/offers', (req, res) => {
-      if (req.get('api-key') == apikey) {
-        console.log("applying");
-
-        updateOffer(req.body.id, req.body.name, req.body.description, req.body.loyalty_points_required, res);
-      }else{
-        res.send('{ "error": "No Auth"}');
-        ;
-      }
-    });
+  });
 
 
-    app.post('/offers', (req, res) => {
-      if (req.get('api-key') == apikey) {
-        createOffer( req.body.name, req.body.description, req.body.loyalty_points_required, res);
-      }else{
-        res.send('{ "error": "No Auth"}');
-        ;
-      }
-    });
+  app.post('/offers', (req, res) => {
+    if (req.get('api-key') == apikey) {
+      createOffer( req.body.name, req.body.description, req.body.loyalty_points_required, res);
+    }else{
+      res.send('{ "error": "No Auth"}');
+      ;
+    }
+  });
 
 // app.post('/winner', (req, res) => {
 //   saveWinner(req.body.member_id, req.body.club_id, req.body.email, req.body.first_name, req.body.last_name );
@@ -686,6 +676,8 @@ app.post('/message', (req, res) => {
       title = req.query.title;
     }
 
+console.log(message);
+console.log(title);
 
     handlePushTokens(message, title, req.params.member_id);
     res.send(`${message}`);
@@ -734,8 +726,11 @@ app.post('/booking', (req, res) => {
 
 app.post('/winners/choose', (req, res) => {
 
+
   if (req.get('api-key') == apikey) {
     getTonightsWinners();
+
+    generateReport();
     res.send(`Getting Tonights Winners, ${req.body.member_id}`);
 
   }else{
