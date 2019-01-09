@@ -671,7 +671,7 @@ app.post('/winners/choose', (req, res) => {
 
   if (req.get('api-key') == apikey && n > 18 ) {
     getTonightsWinners();
-    generateReport();
+    //generateReport();
     res.send(`Getting Tonights Winners, ${req.body.member_id}`);
   }else{
     res.send('{ "error": "No Auth"}');
