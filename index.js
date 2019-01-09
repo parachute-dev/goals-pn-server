@@ -330,9 +330,9 @@ const saveToken = (token, device_type, member_id, res) => {
          booking_date:booking_date,
 
        };
-       sendEmail(doc[0].email, "You've won a free game at Goals!", user, "winner");
-       sendEmail(club_email, "Someone's won a free game", user, "winner-club");
-       handlePushTokens("Just use the QuickPay option in the app to redeem.", "You've won a FREE game!", member_id);
+       //sendEmail(doc[0].email, "You've won a free game at Goals!", user, "winner");
+       //sendEmail(club_email, "Someone's won a free game", user, "winner-club");
+       //handlePushTokens("Just use the QuickPay option in the app to redeem.", "You've won a FREE game!", member_id);
 
 
      }, function(err) {
