@@ -360,12 +360,13 @@ const saveToken = (token, device_type, member_id, res) => {
 
           for(var club of clubs){
 
-            Booking.findRandom({club_id: club.Name,  created_at: {
-          $gte: today.toDate(),
-          $lte: moment(today).endOf('day').toDate()
-        }}, {}, {limit: 1}, function(err, result) {
+            Booking.find({club_id: club.Name,  created_at: {
+              $gte: today.toDate(),
+              $lte: moment(today).endOf('day').toDate()
+            }}, {}, {limit: 1}, function(err, result) {
 
               if (!err && result != null) {
+                console.log("here");
 
                 var new_winner = new Winner({
                   member_id: result[0].member_id,
@@ -628,12 +629,12 @@ app.post('/message', (req, res) => {
      res.send(`${message}`);
 
    }else{
-      res.send(`{"error" : "not allowed to send - IP rejected", "IP" : ${requestIP}}`);
-    }
-
-  }else{
-    res.send('{ "error": "No Auth"}');    
+    res.send(`{"error" : "not allowed to send - IP rejected", "IP" : ${requestIP}}`);
   }
+
+}else{
+  res.send('{ "error": "No Auth"}');    
+}
 });
 
 app.post('/user', (req, res) => {
@@ -678,32 +679,32 @@ app.post('/message/:member_id', (req, res) => {
      let title = null;
      let message = null;
 
-      if (req.body.message != null && req.body.message != ""){
-        message = req.body.message;
-      }
+     if (req.body.message != null && req.body.message != ""){
+      message = req.body.message;
+    }
 
-      if (req.body.title != null && req.body.title != ""){
-        title = req.body.title;
-      }
+    if (req.body.title != null && req.body.title != ""){
+      title = req.body.title;
+    }
 
-      if (req.query.message != null && req.query.message != ""){
-        message = req.query.message;
-      }
+    if (req.query.message != null && req.query.message != ""){
+      message = req.query.message;
+    }
 
-      if (req.query.title != null && req.query.title != ""){
-        title = req.query.title;
-      }
+    if (req.query.title != null && req.query.title != ""){
+      title = req.query.title;
+    }
 
     handlePushTokens(message, title, req.params.member_id);
     res.send(`Message successfully sent:  ${message}`);
 
-    }else{
-      res.send(`not allowed to send - IP rejected`);
-    }
-
   }else{
-    res.send('{ "error": "No Auth"}');  
+    res.send(`not allowed to send - IP rejected`);
   }
+
+}else{
+  res.send('{ "error": "No Auth"}');  
+}
 
 });
 
