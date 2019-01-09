@@ -330,9 +330,9 @@ const saveToken = (token, device_type, member_id, res) => {
          booking_date:booking_date,
        };
 
-       sendEmail(doc[0].email, "You've won a free game at Goals!", user, "winner");
-       sendEmail(club_email, "Someone's won a free game", user, "winner-club");
-       handlePushTokens("Just use the QuickPay option in the app to redeem.", "You've won a FREE game!", member_id);
+       // sendEmail(doc[0].email, "You've won a free game at Goals!", user, "winner");
+       // sendEmail(club_email, "Someone's won a free game", user, "winner-club");
+       // handlePushTokens("Just use the QuickPay option in the app to redeem.", "You've won a FREE game!", member_id);
 
 
      }, function(err) {
@@ -367,7 +367,11 @@ const saveToken = (token, device_type, member_id, res) => {
               if (!err && result != null) {
                 console.log("here")
 
-                var new_winner = new Winner({
+                console.log(result[0].club_id);
+                console.log(result[0].member_id);
+
+
+              /*  var new_winner = new Winner({
                   member_id: result[0].member_id,
                   created_at: Date(),
                   club: result[0].club_id
@@ -380,7 +384,7 @@ const saveToken = (token, device_type, member_id, res) => {
                     messageWinners(result[0].member_id, result[0].club_id, result[0].booking_ref, result[0].booking_date );
 
                   }
-                });
+                });*/
               }
             });
 
