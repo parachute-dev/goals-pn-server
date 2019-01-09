@@ -360,13 +360,13 @@ const saveToken = (token, device_type, member_id, res) => {
 
           for(var club of clubs){
 
-            Booking.find({created_at: {
+            Booking.findRandom({club_id: club.Name,  created_at: {
               $gte: today.toDate(),
               $lte: moment(today).endOf('day').toDate()
             }}, {}, {limit: 1}, function(err, result) {
 
               if (!err && result != null) {
-                console.log("here");
+                console.log("here")
 
                 var new_winner = new Winner({
                   member_id: result[0].member_id,
