@@ -360,7 +360,7 @@ const saveToken = (token, device_type, member_id, res) => {
 
           for(var club of clubs){
 
-            Booking.find({club_id: club.Name,  created_at: {
+            Booking.find({created_at: {
               $gte: today.toDate(),
               $lte: moment(today).endOf('day').toDate()
             }}, {}, {limit: 1}, function(err, result) {
