@@ -312,7 +312,7 @@ const saveToken = (token, device_type, member_id, res) => {
 
     const messageWinners = (member_id,club_id,ref,booking_date) => {
 
-      let club_email = club_id.replace(/\s+/g, '').toLowerCase() + "@" +"goalsfootball.co.uk";
+      let club_email = club_id.replace(" ", '').replace("-","").toLowerCase() + "@" +"goalsfootball.co.uk";
       club_email = club_id.replace("birminghamperryparr",'perrybarr').toLowerCase() + "@" +"goalsfootball.co.uk";
       club_email = club_id.replace("birminghamstarcity",'birmingham').toLowerCase() + "@" +"goalsfootball.co.uk";
 
