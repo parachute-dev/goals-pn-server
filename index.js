@@ -331,8 +331,7 @@ const saveToken = (token, device_type, member_id, res) => {
 
        };
        sendEmail(doc[0].email, "You've won a free game at Goals!", user, "winner");
-      // sendEmail(club_email, "Someone's won a free game", user, "winner-club");
-       console.log(club_email);
+       sendEmail(club_email, "Someone's won a free game", user, "winner-club");
        handlePushTokens("Just use the QuickPay option in the app to redeem.", "You've won a FREE game!", member_id);
 
 
@@ -660,9 +659,14 @@ app.post('/booking', (req, res) => {
 });
 
 app.post('/winners/choose', (req, res) => {
-  if (req.get('api-key') == apikey) {
+
+
+  var d = new Date();
+  var n = d.getHours();
+
+  if (req.get('api-key') == apikey && n > 21) {
     getTonightsWinners();
-    //generateReport();
+    generateReport();
     res.send(`Getting Tonights Winners, ${req.body.member_id}`);
   }else{
     res.send('{ "error": "No Auth"}');
