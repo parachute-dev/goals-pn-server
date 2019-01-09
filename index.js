@@ -400,7 +400,7 @@ const saveToken = (token, device_type, member_id, res) => {
 
    let user = {
    }
-   sendEmail("david@thisisparachute.com", "APP PAYMENT REPORT", user, "report");
+   sendEmail("david@thisisparachute.com,jp@goalsfootball.co.uk", "APP PAYMENT REPORT", user, "report");
 
  }
 
