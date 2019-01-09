@@ -330,9 +330,10 @@ const saveToken = (token, device_type, member_id, res) => {
          booking_date:booking_date,
 
        };
-       sendEmail(doc[0].email, "You've won a free game at Goals!", user, "winner");
+       //sendEmail(doc[0].email, "You've won a free game at Goals!", user, "winner");
        //sendEmail(club_email, "Someone's won a free game", user, "winner-club");
-       handlePushTokens("You've won a FREE game! Just use the QuickPay option in the app to redeem.", "Win a free game!", member_id);
+       console.log(club_email);
+       //handlePushTokens("Just use the QuickPay option in the app to redeem.", "You've won a FREE game!", member_id);
 
 
      }, function(err) {
@@ -341,9 +342,7 @@ const saveToken = (token, device_type, member_id, res) => {
     });
     }
     const getTonightsWinners = () =>{
-
       const today = moment().startOf('day');
-
       Winner.find({
         created_at: {
           $gte: today.toDate(),
@@ -351,21 +350,15 @@ const saveToken = (token, device_type, member_id, res) => {
         }
       }).then(function(doc){
 
-
         if (!doc.length) {       
-
          var result = [];
-
          let response = Club.find({}, (err, clubs) => {
           if (!err){
-
           }
 
         }).then(function(clubs) {  
 
-
           for(var club of clubs){
-
 
             Booking.findRandom({club_id: club.Name}, {}, {limit: 1}, function(err, result) {
 
@@ -394,14 +387,10 @@ const saveToken = (token, device_type, member_id, res) => {
           console.log(err);
         });
 
-
       }
-
-
 
     }).catch(function(err){
       console.log("here");
-
       console.log(err);
     });
 
@@ -487,13 +476,7 @@ const updateLoyalty = (member_id, points, res) => {
 
   User.find({member_id}).then(function(doc) {  
 
-
-
     if (doc != null && doc[0] != null){
-
-      console.log(doc[0]);
-      console.log("here");
-      console.log(doc[0].loyalty_points + points);
 
       const newPoints = doc[0].loyalty_points + points;
 
@@ -517,20 +500,12 @@ const updateLoyalty = (member_id, points, res) => {
 
         });
 
-
-
-
       }else{
-
         res.send(`no updated`);
-
       }
-
-
 
     }).catch(function(err){
       res.send(`Loyalty Error last`);
-
     });
   }
 
@@ -588,11 +563,9 @@ const updateLoyalty = (member_id, points, res) => {
   app.put('/offers', (req, res) => {
     if (req.get('api-key') == apikey) {
       console.log("applying");
-
       updateOffer(req.body.id, req.body.name, req.body.description, req.body.loyalty_points_required, res);
     }else{
-      res.send('{ "error": "No Auth"}');
-      ;
+      res.send('{ "error": "No Auth"}');      
     }
   });
 
@@ -614,12 +587,7 @@ const updateLoyalty = (member_id, points, res) => {
 
 app.post('/winner/redeem', (req, res) => {
 
-  console.log("winner/redeem");
-  console.log(req.body);
-  console.log(req.body);
-
   redeemWinner(req.body.member_id, res );
-
 
 });
 
@@ -631,22 +599,12 @@ app.post('/loyalty', (req, res) => {
 
 app.get('/loyalty/:member_id', (req, res) => {
 
-  console.log(req.params.member_id);
   getLoyalty(req.params.member_id, res);
 
 });
 
 app.post('/token', (req, res) => {
-
-
-  console.log("HERE");
-  console.log(req.body);
-  console.log(req.body.token);
-  console.log(req.body.member_id);
-  console.log(req.body.device_type);
   saveToken(req.body.token, req.body.device_type, req.body.member_id ,res);
-
-
 });
 
 app.post('/message', (req, res) => {
@@ -660,27 +618,20 @@ app.post('/message', (req, res) => {
      let title = null;
      let message = null;
 
+     console.log(message);
+     console.log(title);
 
+     handlePushTokens(req.body.message, req.body.title, req.params.member_id);
+     res.send(`${message}`);
 
-console.log(message);
-console.log(title);
-
-    handlePushTokens(req.body.message, req.body.title, req.params.member_id);
-    res.send(`${message}`);
+   }else{
+      res.send(`{"error" : "not allowed to send - IP rejected", "IP" : ${requestIP}}`);
+    }
 
   }else{
-    res.send(`{"error" : "not allowed to send - IP rejected", "IP" : ${requestIP}}`);
-
+    res.send('{ "error": "No Auth"}');    
   }
-
-
-}else{
-  res.send('{ "error": "No Auth"}');
-  ;
-
-}
-}
-);
+});
 
 app.post('/user', (req, res) => {
 
@@ -689,10 +640,8 @@ app.post('/user', (req, res) => {
     last_name: req.body.last_name,
     email:  req.body.email_address,
     member_id: req.body.member_id
-
   });
   createUpdateUser(user, res);
-
 });
 
 
@@ -703,25 +652,16 @@ app.get('/winners', (req, res) => {
 });
 
 app.post('/booking', (req, res) => {
-
-
-
   saveBooking(req.body.booking_ref, req.body.booking_date, req.body.member_id, req.body.club_id, req.body.amount_paid, req.body.booking_mode, res );
-
 });
 
 app.post('/winners/choose', (req, res) => {
-
-
   if (req.get('api-key') == apikey) {
     getTonightsWinners();
-
     generateReport();
     res.send(`Getting Tonights Winners, ${req.body.member_id}`);
-
   }else{
     res.send('{ "error": "No Auth"}');
-
   }
 });
 
@@ -730,69 +670,53 @@ app.post('/message/:member_id', (req, res) => {
   if (req.get('api-key') == apikey) {
     var requestIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
-
     if(trustedIps.indexOf(requestIP) >= 0) {
 
      let title = null;
      let message = null;
 
-     if (req.body.message != null && req.body.message != ""){
-      message = req.body.message;
-    }
+      if (req.body.message != null && req.body.message != ""){
+        message = req.body.message;
+      }
 
-    if (req.body.title != null && req.body.title != ""){
-      title = req.body.title;
-    }
+      if (req.body.title != null && req.body.title != ""){
+        title = req.body.title;
+      }
 
-    if (req.query.message != null && req.query.message != ""){
-      message = req.query.message;
-    }
+      if (req.query.message != null && req.query.message != ""){
+        message = req.query.message;
+      }
 
-    if (req.query.title != null && req.query.title != ""){
-      title = req.query.title;
-    }
+      if (req.query.title != null && req.query.title != ""){
+        title = req.query.title;
+      }
 
     handlePushTokens(message, title, req.params.member_id);
     res.send(`Message successfully sent:  ${message}`);
+
+    }else{
+      res.send(`not allowed to send - IP rejected`);
+    }
+
   }else{
-    res.send(`not allowed to send - IP rejected`);
+    res.send('{ "error": "No Auth"}');  
   }
-}else{
-  res.send('{ "error": "No Auth"}');
-  ;
-
-}
-
-}
-
-
-);
-
-app.get('/winner/verify/:member_id', (req,res) => {
-
-
-  verifyWinner(req.params.member_id, res);
 
 });
 
+app.get('/winner/verify/:member_id', (req,res) => {
+  verifyWinner(req.params.member_id, res);
+});
+
 app.post('/hook',(req,res) => {
-
   if (req.query.apikey == apikey) {
-
-
-
     if (req.body['contact[fields][member_id]'] && req.query.title && req.query.message != null ) {
      handlePushTokens(req.query.message, req.query.title, req.body['contact[fields][member_id]']);
      res.send("Sending Message");
-
-
    }else{
      res.send("Something was omitted");
-
    }
-
  }else{
-
   res.send(`not allowed to send - IP rejected`);
 }
 });
