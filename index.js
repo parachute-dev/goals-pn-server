@@ -457,17 +457,17 @@ const saveBooking = (booking_ref, booking_date, member_id, club_id, amount_paid,
 
 const getLoyalty = (member_id, res) => {
 
-  let users = User.find({member_id}).then(function(doc) {  
-    console.log(doc);
-    console.log(`Retrieved Loyalty Points: ${doc[0].loyalty_points} `);
-    res.send(`${doc[0].loyalty_points}`);
+  // let users = User.find({member_id}).then(function(doc) {  
+  //   console.log(doc);
+  //   console.log(`Retrieved Loyalty Points: ${doc[0].loyalty_points} `);
+  //   res.send(`${doc[0].loyalty_points}`);
 
 
-  }, function(err) {
-    console.log(err);
-    res.send(`Loyalty Error `);
+  // }, function(err) {
+  //   console.log(err);
+  //   res.send(`Loyalty Error `);
 
-  });
+  // });
 
 }
 
