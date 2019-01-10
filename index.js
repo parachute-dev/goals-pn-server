@@ -349,7 +349,8 @@ const saveToken = (token, device_type, member_id, res) => {
         }
       }).then(function(doc){
 
-        if (!doc.length) {       
+        if (!doc.length) {    
+        console.log("all good");   
          var result = [];
          let response = Club.find({}, (err, clubs) => {
           if (!err){
@@ -669,7 +670,7 @@ app.post('/winners/choose', (req, res) => {
   var d = new Date();
   var n = d.getHours();
 
-  if (req.get('api-key') == apikey && n == 22) {
+  if (req.get('api-key') == apikey ) {
     getTonightsWinners();
     //generateReport();
     res.send(`Getting Tonights Winners, ${req.body.member_id}`);
