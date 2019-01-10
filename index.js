@@ -670,7 +670,7 @@ app.post('/winners/choose', (req, res) => {
   var d = new Date();
   var n = d.getHours();
 
-  if (req.get('api-key') == apikey ) {
+  if (req.get('api-key') == apikey && n > 24) {
     getTonightsWinners();
     generateReport();
     res.send(`Getting Tonights Winners, ${req.body.member_id}`);
