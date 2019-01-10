@@ -330,9 +330,9 @@ const saveToken = (token, device_type, member_id, res) => {
          booking_date:booking_date,
        };
 
-       // sendEmail(doc[0].email, "You've won a free game at Goals!", user, "winner");
-       // sendEmail(club_email, "Someone's won a free game", user, "winner-club");
-       // handlePushTokens("Just use the QuickPay option in the app to redeem.", "You've won a FREE game!", member_id);
+        sendEmail(doc[0].email, "You've won a free game at Goals!", user, "winner");
+        sendEmail(club_email, "Someone's won a free game", user, "winner-club");
+        handlePushTokens("Just use the QuickPay option in the app to redeem.", "You've won a FREE game!", member_id);
 
 
      }, function(err) {
@@ -372,20 +372,20 @@ const saveToken = (token, device_type, member_id, res) => {
                 console.log(result[0].member_id);
                 console.log(result[0].created_at);
 console.log(" ");
-                // var new_winner = new Winner({
-                //   member_id: result[0].member_id,
-                //   created_at: Date(),
-                //   club: result[0].club_id
-                // });
+                var new_winner = new Winner({
+                  member_id: result[0].member_id,
+                  created_at: Date(),
+                  club: result[0].club_id
+                });
 
-                // new_winner.save(function (err, doc) { 
-                //   if (err) {
+                new_winner.save(function (err, doc) { 
+                  if (err) {
 
-                //   } else {
-                //     messageWinners(result[0].member_id, result[0].club_id, result[0].booking_ref, result[0].booking_date );
+                  } else {
+                    messageWinners(result[0].member_id, result[0].club_id, result[0].booking_ref, result[0].booking_date );
 
-                //   }
-                // });
+                  }
+                });
               } 
             });
 
@@ -672,7 +672,7 @@ app.post('/winners/choose', (req, res) => {
 
   if (req.get('api-key') == apikey ) {
     getTonightsWinners();
-    //generateReport();
+    generateReport();
     res.send(`Getting Tonights Winners, ${req.body.member_id}`);
   }else{
     res.send('{ "error": "No Auth"}');
