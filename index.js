@@ -365,12 +365,12 @@ const saveToken = (token, device_type, member_id, res) => {
             }}, {}, {limit: 1}, function(err, result) {
 
               if (!err && result != null) {
-                console.log("here")
+              
 
                 console.log(result[0].club_id);
                 console.log(result[0].member_id);
-
-
+                console.log(result[0].created_at);
+console.log(" ");
                 // var new_winner = new Winner({
                 //   member_id: result[0].member_id,
                 //   created_at: Date(),
