@@ -381,7 +381,7 @@ console.log(" ");
                   if (err) {
 
                   } else {
-                    //messageWinners(result[0].member_id, result[0].club_id, result[0].booking_ref, result[0].booking_date );
+                    messageWinners(result[0].member_id, result[0].club_id, result[0].booking_ref, result[0].booking_date );
 
                   }
                 });
