@@ -312,9 +312,9 @@ const saveToken = (token, device_type, member_id, res) => {
 
     const messageWinners = (member_id,club_id,ref,booking_date) => {
 
-      let club_email = club_id.replace(" ", '').replace("-","").toLowerCase() + "@" +"goalsfootball.co.uk";
-      club_email = club_id.replace("birminghamperryparr",'perrybarr').toLowerCase() + "@" +"goalsfootball.co.uk";
-      club_email = club_id.replace("birminghamstarcity",'birmingham').toLowerCase() + "@" +"goalsfootball.co.uk";
+      let club_email = club_id.replace(" ", '').replace("-","").toLowerCase();
+      club_email = club_id.replace("birminghamperryparr",'perrybarr');
+      club_email = club_id.replace("birminghamstarcity",'birmingham') + "@goalsfootball.co.uk";
 
       let users = User.find({member_id}).then(function(doc) {  
 
@@ -360,7 +360,7 @@ const saveToken = (token, device_type, member_id, res) => {
 
           for(var club of clubs){
 
-            Booking.findRandom({club_id: club.Name,  created_at: {
+            Booking.findRandom({club_id: club.Name, booking_mode: "1", created_at: {
               $gte: today.toDate(),
               $lte: moment(today).endOf('day').toDate()
             }}, {}, {limit: 1}, function(err, result) {
@@ -371,21 +371,22 @@ const saveToken = (token, device_type, member_id, res) => {
                 console.log(result[0].club_id);
                 console.log(result[0].member_id);
                 console.log(result[0].created_at);
+                console.log(result[0].booking_mode);
 console.log(" ");
-                var new_winner = new Winner({
-                  member_id: result[0].member_id,
-                  created_at: Date(),
-                  club: result[0].club_id
-                });
+                // var new_winner = new Winner({
+                //   member_id: result[0].member_id,
+                //   created_at: Date(),
+                //   club: result[0].club_id
+                // });
 
-                new_winner.save(function (err, doc) { 
-                  if (err) {
+                // new_winner.save(function (err, doc) { 
+                //   if (err) {
 
-                  } else {
-                    messageWinners(result[0].member_id, result[0].club_id, result[0].booking_ref, result[0].booking_date );
+                //   } else {
+                //     //messageWinners(result[0].member_id, result[0].club_id, result[0].booking_ref, result[0].booking_date );
 
-                  }
-                });
+                //   }
+                // });
               } 
             });
 
@@ -670,9 +671,9 @@ app.post('/winners/choose', (req, res) => {
   var d = new Date();
   var n = d.getHours();
 
-  if (req.get('api-key') == apikey && n > 24) {
+  if (req.get('api-key') == apikey && n > 21) {
     getTonightsWinners();
-    generateReport();
+   // generateReport();
     res.send(`Getting Tonights Winners, ${req.body.member_id}`);
   }else{
     res.send('{ "error": "No Auth"}');
