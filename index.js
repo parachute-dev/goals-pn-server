@@ -672,12 +672,18 @@ app.post('/user', (req, res) => {
 app.get('/winners', (req, res) => {
  if (req.get('api-key') == apikey) {
   getWinners(res);
+}else{
+      res.send('{ "error": "No Auth"}');
+
 }
 });
 
 app.get('/bookings', (req, res) => {
  if (req.get('api-key') == apikey) {
   getBookings(res);
+}else{
+    res.send('{ "error": "No Auth"}');
+
 }
 });
 
