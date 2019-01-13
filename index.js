@@ -63,7 +63,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 const getBookings = (res) =>{
 
-  Bookings.find({} , (err, users) => {
+  Booking.find({} , (err, users) => {
 
   }).then(function(doc){
     res.send(doc);
