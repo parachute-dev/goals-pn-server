@@ -61,6 +61,22 @@ let bookings = Booking.find({});
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 
+const getBookings = (res) =>{
+
+  Bookings.find({} , (err, users) => {
+
+  }).then(function(doc){
+    res.send(doc);
+
+
+  }).catch(function(err){
+    res.send("{'error': 'No Bookings'}");
+
+  });
+
+
+}
+
 const getWinners = (res) =>{
 
   Winner.find({} , (err, users) => {
@@ -656,6 +672,12 @@ app.post('/user', (req, res) => {
 app.get('/winners', (req, res) => {
  if (req.get('api-key') == apikey) {
   getWinners(res);
+}
+});
+
+app.get('/bookings', (req, res) => {
+ if (req.get('api-key') == apikey) {
+  getBookings(res);
 }
 });
 
