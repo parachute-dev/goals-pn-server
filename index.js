@@ -769,7 +769,6 @@ app.post('/hook',(req,res) => {
 });
 
 
-
 app.get('/loyalty/crm',(req,res) => {
   if (req.query.apikey == apikey) {
     if (req.query.member_id && req.query.points != null ) {
