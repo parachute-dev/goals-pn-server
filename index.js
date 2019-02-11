@@ -494,7 +494,7 @@ const getLoyalty = (member_id, res) => {
     res.send(`Loyalty Error `);
 
   });
-          res.send("");
+     
 
 }
 
