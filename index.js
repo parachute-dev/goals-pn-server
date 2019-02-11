@@ -482,11 +482,10 @@ const getLoyalty = (member_id, res) => {
     console.log(doc);
     console.log(`Retrieved Loyalty Points: ${doc[0].loyalty_points} `);
 
-    if (doc[0].loyalty_points == null) {
+    if (doc[0].loyalty_points == null || doc[0].loyalty_points == "") {
     res.send(`0`);
   }else{
      res.send(`${doc[0].loyalty_points}`);
-  
   }
 
 
