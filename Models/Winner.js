@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 
 // create a schema
 var winnerSchema = new Schema({
-  club: { type: String, required: true },
+  club: { type: String },
   member_id: { type: String, required: true },
   redeemed: {type: Boolean, default: false},
   redeemed_at : {type: Date},

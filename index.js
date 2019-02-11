@@ -94,6 +94,25 @@ const getWinners = (res) =>{
 
 }
 
+const alotWinner = (member_id, club_id, res) =>{
+
+  var new_winner = new Winner({
+    member_id: member_id,
+    created_at: Date()
+  });
+
+  new_winner.save(function (err, doc) { 
+    if (err) {
+      console.log(err);
+    } else {
+      //
+      console.log("winner saved");
+
+    }
+  });
+
+}
+
 const getOffers = (res) =>{
 
   Offer.find({} , (err, users) => {
@@ -315,7 +334,7 @@ const saveToken = (token, device_type, member_id, res) => {
       let verify = false;
       Winner.find({member_id, redeemed: false} , (err, users) => {
 
- 
+
         if (users != null && users.length ){
           verify = true;
         }
@@ -335,25 +354,25 @@ const saveToken = (token, device_type, member_id, res) => {
 
 
         let user = {
-         first_name: doc[0].first_name,
-         last_name: doc[0].last_name,
-         name: doc[0].first_name + " " + doc[0].last_name,
-         email: club_email,
-         club: club_id,
-         booking_ref: ref,
-         member_id: doc[0].member_id,
-         booking_date:booking_date,
-       };
+          first_name: doc[0].first_name,
+          last_name: doc[0].last_name,
+          name: doc[0].first_name + " " + doc[0].last_name,
+          email: club_email,
+          club: club_id,
+          booking_ref: ref,
+          member_id: doc[0].member_id,
+          booking_date:booking_date,
+        };
 
         sendEmail(doc[0].email, "You've won a free game at Goals!", user, "winner");
         sendEmail(club_email, "Someone's won a free game", user, "winner-club");
         handlePushTokens("Just use the QuickPay option in the app to redeem.", "You've won a FREE game!", member_id);
 
 
-     }, function(err) {
-      console.log(err);
+      }, function(err) {
+        console.log(err);
 
-    });
+      });
     }
     const getTonightsWinners = () =>{
       const today = moment().startOf('day');
@@ -365,204 +384,208 @@ const saveToken = (token, device_type, member_id, res) => {
       }).then(function(doc){
 
         if (!doc.length) {    
-        console.log("all good");   
-         var result = [];
-         let response = Club.find({}, (err, clubs) => {
-          if (!err){
-          }
+          console.log("all good");   
+          var result = [];
+          let response = Club.find({}, (err, clubs) => {
+            if (!err){
+            }
 
-        }).then(function(clubs) {  
+          }).then(function(clubs) {  
 
-          for(var club of clubs){
+            for(var club of clubs){
 
-            Booking.findRandom({club_id: club.Name, booking_mode: "1", created_at: {
-              $gte: today.toDate(),
-              $lte: moment(today).endOf('day').toDate()
-            }}, {}, {limit: 1}, function(err, result) {
+              Booking.findRandom({club_id: club.Name, booking_mode: "1", created_at: {
+                $gte: today.toDate(),
+                $lte: moment(today).endOf('day').toDate()
+              }}, {}, {limit: 1}, function(err, result) {
 
-              if (!err && result != null) {
-              
-
-                console.log(result[0].club_id);
-                console.log(result[0].member_id);
-                console.log(result[0].created_at);
-                console.log(result[0].booking_mode);
-console.log(" ");
-                var new_winner = new Winner({
-                  member_id: result[0].member_id,
-                  created_at: Date(),
-                  club: result[0].club_id
-                });
-
-                new_winner.save(function (err, doc) { 
-                  if (err) {
-
-                  } else {
-                    messageWinners(result[0].member_id, result[0].club_id, result[0].booking_ref, result[0].booking_date );
-
-                  }
-                });
-              } 
-            });
-
-          }
-
-        }, function(err) {
-          console.log(err);
-        });
-
-      }
-
-    }).catch(function(err){
-      console.log("here");
-      console.log(err);
-    });
-
-  }
-
-  const generateReport = (results) => {
-
-   let user = {
-   }
-   sendEmail("david@thisisparachute.com,jp@goalsfootball.co.uk", "APP PAYMENT REPORT", user, "report");
-
- }
-
- const saveWinner = (member_id, club_id, email, first_name, last_name) => {
-
-  var new_winner = new Winner({
-    member_id,
-    club_id,
-    email,
-    first_name,
-    last_name
-  });
-
-  new_winner.save(function (err, doc) { 
-    if (err) {
-
-    } else {
-
-    }
-  });
-
-}
-
-const saveBooking = (booking_ref, booking_date, member_id, club_id, amount_paid, booking_mode, res) => {
+                if (!err && result != null) {
 
 
+                  console.log(result[0].club_id);
+                  console.log(result[0].member_id);
+                  console.log(result[0].created_at);
+                  console.log(result[0].booking_mode);
+                  console.log(" ");
+                  var new_winner = new Winner({
+                    member_id: result[0].member_id,
+                    created_at: Date(),
+                    club: result[0].club_id
+                  });
 
-  var new_booking = new Booking({
-    booking_date,
-    booking_ref,
-    member_id,
-    club_id,
-    amount_paid,
-    booking_mode,
-    created_at: Date()
-  }); 
-  console.log(new_booking);
+                  new_winner.save(function (err, doc) { 
+                    if (err) {
 
-  new_booking.save(function (err, doc) { 
-    if (err) {
-      console.log(err);
-      res.send("false");
+                    } else {
+                      messageWinners(result[0].member_id, result[0].club_id, result[0].booking_ref, result[0].booking_date );
 
-    } else {
-      res.send("true");
+                    }
+                  });
+                } 
+              });
 
-    }
-  });
+            }
 
-}
+          }, function(err) {
+            console.log(err);
+          });
 
-const getLoyalty = (member_id, res) => {
-
-  let users = User.find({member_id}).then(function(doc) {  
-    console.log(doc);
-    console.log(`Retrieved Loyalty Points: ${doc[0].loyalty_points} `);
-
-    if (doc[0].loyalty_points == null || doc[0].loyalty_points == "") {
-    res.send(`0`);
-  }else{
-     res.send(`${doc[0].loyalty_points}`);
-  }
-
-
-  }, function(err) {
-    console.log(err);
-    res.send(`Loyalty Error `);
-
-  });
-     
-
-}
-
-const getLoyaltyOffers = () => {
-
-}
-
-const updateLoyalty = (member_id, points, res) => {
-
-  User.find({member_id}).then(function(doc) {  
-
-    if (doc != null && doc[0] != null){
-
-      const newPoints = doc[0].loyalty_points + points;
-
-
-      User.findOneAndUpdate(
-        { member_id },
-        {loyalty_points: newPoints },
-        {new: true }
-        ,
-        function (err, doc) { 
-          console.log("HERE2");
-          console.log(doc);
         }
-        ).then(function(doc){
-          console.log(doc);
 
-          res.send(`${newPoints}`);
+      }).catch(function(err){
+        console.log("here");
+        console.log(err);
+      });
 
-        }).catch(function(err){
-          res.send(`Loyalty Error ${newPoints}`);
+    }
 
-        });
+    const generateReport = (results) => {
 
-      }else{
-        res.send(`no updated`);
+      let user = {
       }
+      sendEmail("david@thisisparachute.com,jp@goalsfootball.co.uk", "APP PAYMENT REPORT", user, "report");
 
-    }).catch(function(err){
-      res.send(`Loyalty Error last`);
-    });
-  }
+    }
 
-  const redeemWinner = (member_id, res) => {
-    console.log("member id:" + member_id);
-    Winner.findOneAndUpdate(
-      { member_id, redeemed: false },
-      { $set: { redeemed: true, redeemed_at: Date() }},
-      null,
-      function (err, doc) { 
+    const saveWinner = (member_id) => {
+
+      var new_winner = new Winner({
+        member_id,
+        redeemed: false,
+        created_at: Date()         
+
+      });
+
+      new_winner.save(function (err, doc) { 
+        if (err) {
+
+        } else {
+
+        }
+      });
+
+    }
+
+    const saveBooking = (booking_ref, booking_date, member_id, club_id, amount_paid, booking_mode, res) => {
+
+
+
+      var new_booking = new Booking({
+        booking_date,
+        booking_ref,
+        member_id,
+        club_id,
+        amount_paid,
+        booking_mode,
+        created_at: Date()
+      }); 
+      console.log(new_booking);
+
+      new_booking.save(function (err, doc) { 
         if (err) {
           console.log(err);
-          res.send(`{ "error": "No Winner"}`);
+          res.send("false");
 
-          return false;
         } else {
-          console.log(doc);
-          if (doc != null){
-            console.log("redeemed: " + member_id);
-            let user = {
-              email: doc.email,
-              first_name: doc.first_name,
-              last_name: doc.last_name,
-              club_id: doc.club_id,
-              redeemedDate: doc.redeemedDate,
-              createdDate: doc.created_at
+          res.send("true");
+
+        }
+      });
+
+    }
+
+    const getLoyalty = (member_id, res) => {
+      console.log("here");
+
+      let users = User.find({member_id}).then(function(doc) {  
+
+        if (users.length) {
+          if (doc[0].loyalty_points == null || doc[0].loyalty_points == "") {
+            res.send(`0`);
+          }else{
+            res.send(`${doc[0].loyalty_points}`);
+          }
+
+        }else{
+          res.send(`Loyalty Error a`);
+        }
+
+
+      }, function(err) {
+        console.log(err);
+        res.send(`Loyalty Error b`);
+
+      });
+
+
+    }
+
+    const getLoyaltyOffers = () => {
+
+    }
+
+    const updateLoyalty = (member_id, points, res) => {
+
+      User.find({member_id}).then(function(doc) {  
+
+        if (doc != null && doc[0] != null){
+
+          const newPoints = parseInt(doc[0].loyalty_points) + parseInt(points);
+
+
+          User.findOneAndUpdate(
+            { member_id },
+            {loyalty_points: newPoints },
+            {new: true }
+            ,
+            function (err, doc) { 
+              console.log("HERE2");
+              console.log(doc);
             }
+            ).then(function(doc){
+              console.log(doc);
+
+              res.send(`${newPoints}`);
+
+            }).catch(function(err){
+              console.log(err);
+              res.send(`Loyalty Error. ${newPoints}`);
+
+            });
+
+          }else{
+            res.send(`no updated`);
+          }
+
+        }).catch(function(err){
+          res.send(`Loyalty Error last`);
+        });
+      }
+
+      const redeemWinner = (member_id, res) => {
+        console.log("member id:" + member_id);
+        Winner.findOneAndUpdate(
+          { member_id, redeemed: false },
+          { $set: { redeemed: true, redeemed_at: Date() }},
+          null,
+          function (err, doc) { 
+            if (err) {
+              console.log(err);
+              res.send(`{ "error": "No Winner"}`);
+
+              return false;
+            } else {
+              console.log(doc);
+              if (doc != null){
+                console.log("redeemed: " + member_id);
+                let user = {
+                  email: doc.email,
+                  first_name: doc.first_name,
+                  last_name: doc.last_name,
+                  club_id: doc.club_id,
+                  redeemedDate: doc.redeemedDate,
+                  createdDate: doc.created_at
+                }
                 //sendEmail(doc.email, "SUBJECT", user, "email");
                 res.send(`{"success": "Redeemed"}`);
                 console.log("redeemed");
@@ -577,43 +600,43 @@ const updateLoyalty = (member_id, points, res) => {
             }
           } 
           );
-  }
+      }
 
-  app.use(bodyParser.json()); 
-  app.use(bodyParser.urlencoded({extended: false}));
+      app.use(bodyParser.json()); 
+      app.use(bodyParser.urlencoded({extended: false}));
 
-  app.get('/', (req, res) => {
-    res.send('Push Notification Server Running');
-  });
+      app.get('/', (req, res) => {
+        res.send('Push Notification Server Running');
+      });
 
-  app.get('/offers', (req, res) => {
-    getOffers(res);
-  });
+      app.get('/offers', (req, res) => {
+        getOffers(res);
+      });
 
-  app.put('/offers', (req, res) => {
-    if (req.get('api-key') == apikey) {
-      console.log("applying");
-      updateOffer(req.body.id, req.body.name, req.body.description, req.body.loyalty_points_required, res);
-    }else{
-      res.send('{ "error": "No Auth"}');      
-    }
-  });
+      app.put('/offers', (req, res) => {
+        if (req.get('api-key') == apikey) {
+          console.log("applying");
+          updateOffer(req.body.id, req.body.name, req.body.description, req.body.loyalty_points_required, res);
+        }else{
+          res.send('{ "error": "No Auth"}');      
+        }
+      });
 
 
-  app.post('/offers', (req, res) => {
-    if (req.get('api-key') == apikey) {
-      createOffer( req.body.name, req.body.description, req.body.loyalty_points_required, res);
-    }else{
-      res.send('{ "error": "No Auth"}');
-      ;
-    }
-  });
+      app.post('/offers', (req, res) => {
+        if (req.get('api-key') == apikey) {
+          createOffer( req.body.name, req.body.description, req.body.loyalty_points_required, res);
+        }else{
+          res.send('{ "error": "No Auth"}');
+          ;
+        }
+      });
 
-// app.post('/winner', (req, res) => {
-//   saveWinner(req.body.member_id, req.body.club_id, req.body.email, req.body.first_name, req.body.last_name );
-//   console.log(`Received Winner: ${req.body.member_id}`);
-//   res.send(`Received Winner, ${req.body.member_id}`);
-// });
+ app.post('/winner', (req, res) => {
+     saveWinner(req.body.member_id );
+     console.log(`Received Winner: ${req.body.member_id}`);
+     res.send(`Received Winner, ${req.body.member_id}`);
+ });
 
 app.post('/winner/redeem', (req, res) => {
 
@@ -627,11 +650,7 @@ app.post('/loyalty', (req, res) => {
 
 }); 
 
-app.get('/loyalty/:member_id', (req, res) => {
 
-  getLoyalty(req.params.member_id, res);
-
-});
 
 app.post('/token', (req, res) => {
   saveToken(req.body.token, req.body.device_type, req.body.member_id ,res);
@@ -645,22 +664,22 @@ app.post('/message', (req, res) => {
 
     if(trustedIps.indexOf(requestIP) >= 0) {
 
-     let title = null;
-     let message = null;
+      let title = null;
+      let message = null;
 
-     console.log(message);
-     console.log(title);
+      console.log(message);
+      console.log(title);
 
-     handlePushTokens(req.body.message, req.body.title, req.params.member_id);
-     res.send(`${message}`);
+      handlePushTokens(req.body.message, req.body.title, req.params.member_id);
+      res.send(`${message}`);
 
-   }else{
-    res.send(`{"error" : "not allowed to send - IP rejected", "IP" : ${requestIP}}`);
+    }else{
+      res.send(`{"error" : "not allowed to send - IP rejected", "IP" : ${requestIP}}`);
+    }
+
+  }else{
+    res.send('{ "error": "No Auth"}');    
   }
-
-}else{
-  res.send('{ "error": "No Auth"}');    
-}
 });
 
 app.post('/user', (req, res) => {
@@ -675,22 +694,24 @@ app.post('/user', (req, res) => {
 });
 
 
-app.get('/winners', (req, res) => {
- if (req.get('api-key') == apikey) {
-  getWinners(res);
-}else{
-      res.send('{ "error": "No Auth"}');
 
-}
+
+app.get('/winners', (req, res) => {
+  if (req.get('api-key') == apikey) {
+    getWinners(res);
+  }else{
+    res.send('{ "error": "No Auth"}');
+
+  }
 });
 
 app.get('/bookings', (req, res) => {
- if (req.get('api-key') == apikey) {
-  getBookings(res);
-}else{
+  if (req.get('api-key') == apikey) {
+    getBookings(res);
+  }else{
     res.send('{ "error": "No Auth"}');
 
-}
+  }
 });
 
 app.post('/booking', (req, res) => {
@@ -702,7 +723,7 @@ app.post('/winners/choose', (req, res) => {
 
   var d = new Date();
   var n = d.getHours();
- 
+
   if (req.get('api-key') == apikey && n > 21) { 
     getTonightsWinners();
     generateReport();
@@ -719,35 +740,35 @@ app.post('/message/:member_id', (req, res) => {
 
     if(trustedIps.indexOf(requestIP) >= 0) {
 
-     let title = null;
-     let message = null;
+      let title = null;
+      let message = null;
 
-     if (req.body.message != null && req.body.message != ""){
-      message = req.body.message;
+      if (req.body.message != null && req.body.message != ""){
+        message = req.body.message;
+      }
+
+      if (req.body.title != null && req.body.title != ""){
+        title = req.body.title;
+      }
+
+      if (req.query.message != null && req.query.message != ""){
+        message = req.query.message;
+      }
+
+      if (req.query.title != null && req.query.title != ""){
+        title = req.query.title;
+      }
+
+      handlePushTokens(message, title, req.params.member_id);
+      res.send(`Message successfully sent:  ${message}`);
+
+    }else{
+      res.send(`not allowed to send - IP rejected`);
     }
-
-    if (req.body.title != null && req.body.title != ""){
-      title = req.body.title;
-    }
-
-    if (req.query.message != null && req.query.message != ""){
-      message = req.query.message;
-    }
-
-    if (req.query.title != null && req.query.title != ""){
-      title = req.query.title;
-    }
-
-    handlePushTokens(message, title, req.params.member_id);
-    res.send(`Message successfully sent:  ${message}`);
 
   }else{
-    res.send(`not allowed to send - IP rejected`);
+    res.send('{ "error": "No Auth"}');  
   }
-
-}else{
-  res.send('{ "error": "No Auth"}');  
-}
 
 });
 
@@ -758,32 +779,40 @@ app.get('/winner/verify/:member_id', (req,res) => {
 app.post('/hook',(req,res) => {
   if (req.query.apikey == apikey) {
     if (req.body['contact[fields][member_id]'] && req.query.title && req.query.message != null ) {
-     handlePushTokens(req.query.message, req.query.title, req.body['contact[fields][member_id]']);
-     res.send("Sending Message");
-   }else{
-     res.send("Something was omitted");
-   }
- }else{
-  res.send(`not allowed to send - IP rejected`);
-}
+      handlePushTokens(req.query.message, req.query.title, req.body['contact[fields][member_id]']);
+      res.send("Sending Message");
+    }else{
+      res.send("Something was omitted");
+    }
+  }else{
+    res.send(`not allowed to send - IP rejected`);
+  }
 });
 
 
 app.get('/loyalty/crm',(req,res) => {
+
   if (req.query.apikey == apikey) {
-    if (req.query.member_id && req.query.points != null ) {
+    if (req.body['contact[fields][member_id]'] && req.query.points != null ) {
+      updateLoyalty(req.body['contact[fields][member_id]'], req.query.points, res );
+    }else{
+      res.send('{"error": "Something went wrong updating points"}');
+    }
+  }else{
 
-     updateLoyalty(req.query.member_id, req.query.points, res );
 
-    // res.send('{"success": "Updated Points"}');
-   }else{
-     res.send('{"error": "Something went wrong updating points"}');
-   }
- }else{
-     res.send('{"error": "auth"}');
-}
+    res.send('{"error": "auth"}');
+  }
+});
+
+
+app.get('/loyalty/:member_id', (req, res) => {
+  console.log("here11");
+  getLoyalty(req.params.member_id, res);
+
 });
 
 app.listen(PORT_NUMBER, () => {
   console.log(`Server Online on Port ${PORT_NUMBER}`);
 });
+
