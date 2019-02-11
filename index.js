@@ -315,12 +315,13 @@ const saveToken = (token, device_type, member_id, res) => {
       let verify = false;
       Winner.find({member_id, redeemed: false} , (err, users) => {
 
-        console.log(users);
+ 
         if (users != null && users.length ){
           verify = true;
         }
 
-        res.send(verify);
+        // Hard set to false -
+        res.send(false);
 
       });
     }
@@ -696,7 +697,7 @@ app.post('/winners/choose', (req, res) => {
 
   var d = new Date();
   var n = d.getHours();
-
+ 
   if (req.get('api-key') == apikey && n > 21) { 
     getTonightsWinners();
     generateReport();
