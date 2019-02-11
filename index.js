@@ -768,6 +768,23 @@ app.post('/hook',(req,res) => {
 }
 });
 
+
+
+app.get('/loyalty/crm',(req,res) => {
+  if (req.query.apikey == apikey) {
+    if (req.query.member_id && req.query.points != null ) {
+
+     updateLoyalty(req.query.member_id, req.query.points, res );
+
+    // res.send('{"success": "Updated Points"}');
+   }else{
+     res.send('{"error": "Something went wrong updating points"}');
+   }
+ }else{
+     res.send('{"error": "auth"}');
+}
+});
+
 app.listen(PORT_NUMBER, () => {
   console.log(`Server Online on Port ${PORT_NUMBER}`);
 });
