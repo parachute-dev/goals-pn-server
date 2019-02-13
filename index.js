@@ -341,7 +341,7 @@ const saveToken = (token, device_type, member_id, res) => {
         }
 
         // Hard set to false -
-        res.send(false);
+        res.send(verify);
 
       });
     }
