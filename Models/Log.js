@@ -5,9 +5,11 @@ var Schema = mongoose.Schema;
 // create a schema
 var logSchema = new Schema({
   type: { type: String, required: true },
-  token: { type: String, required: true, unique : true },
+  sub_type: { type: String, required: true },
+  additional_info: { type: String, required: true },
+  description: { type: String, required: true },
+  fixture_id: {type: String},
   member_id: { type: String, required: true },
-  loyalty_points: { type: Number, required: true },
   created_at: Date,
   updated_at: Date
 });
@@ -17,4 +19,4 @@ var logSchema = new Schema({
 var Log = mongoose.model('Log', logSchema);
 
 // make this available to our Logs in our Node applications
-module.exports = Log;
+module.exports = Log; 

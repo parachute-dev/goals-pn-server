@@ -5,10 +5,11 @@ var Schema = mongoose.Schema;
 // create a schema
 var userSchema = new Schema({
   email: { type: String, required: true },
-
   member_id: { type: String, required: true, unique:true },
   first_name: { type: String, required: true },
-  last_name: { type: String, required: true },    
+  last_name: { type: String, required: true },   
+  loyalty_opted_in: {type:Boolean, default:true },
+  club_id: {type:String},
   loyalty_points: { type: Number, min: [0, 'Cant have less than zero!'], max: 310, required: true, default: 0  },
   created_at: Date,
   updated_at: Date
