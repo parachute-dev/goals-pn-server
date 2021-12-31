@@ -42,11 +42,11 @@ mailer.extend(app, {
     user: 'david@parachute.net', // gmail id
     pass: '0450b241-e37e-41d1-a17f-7574b695488d' // gmail password
   }
-});
+}); 
 
 //Set up default mongoose connection
 //var mongoDB = 'mongodb://localhost:27017';
-var mongoDB = 'mongodb://parachute:Uzx**978@ds257333-a0.mlab.com:57333,ds257333-a1.mlab.com:57333/heroku_cngjj092?replicaSet=rs-ds257333';
+var mongoDB = 'mongodb+srv://doadmin:K5mNA39uiS8120x7@db-mongodb-lon1-23735-cc76f8e3.mongo.ondigitalocean.com/admin?authSource=admin&tls=true&tlsCAFile=ca-certificate';
 
 mongoose.connect(mongoDB);
 // Get Mongoose to use the global promise library
