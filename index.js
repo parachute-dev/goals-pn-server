@@ -24,7 +24,7 @@ const expo = new Expo();
 
 const apikey = 'EA0uhHt8%j';
 
-var trustedIps = ['8.8.8.8',"::1", "109.203.101.235", "::ffff:10.47.207.66"];
+var trustedIps = ['8.8.8.8',"::1", "109.203.101.235", "::ffff:10.47.207.66", "88.98.53.115"];
 
 app.engine('html', cons.swig)
 app.set('views', __dirname + '/Views');
@@ -46,7 +46,7 @@ mailer.extend(app, {
 
 //Set up default mongoose connection
 //var mongoDB = 'mongodb://localhost:27017';
-var mongoDB = 'mongodb+srv://doadmin:K5mNA39uiS8120x7@db-mongodb-lon1-23735-cc76f8e3.mongo.ondigitalocean.com/admin?authSource=admin&tls=true&tlsCAFile=ca-certificate';
+var mongoDB = 'mongodb+srv://doadmin:K5mNA39uiS8120x7@db-mongodb-lon1-23735-cc76f8e3.mongo.ondigitalocean.com/admin?authSource=admin&replicaSet=db-mongodb-lon1-23735&tls=true&tlsCAFile=ca.crt';
 
 mongoose.connect(mongoDB);
 // Get Mongoose to use the global promise library
